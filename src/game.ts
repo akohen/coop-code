@@ -1,8 +1,12 @@
-import { Request } from 'express';
+import { execute, getState, cmdReturn } from "./actions";
 
 type appResponse = {
     errors?: string,
-    data?: string
+    data?: cmdReturn,
+    expedition: unknown
 }
 
-export default (req: Request) : appResponse => ({ data: `Hello ${req.body.foo}` });
+export default (data: {cmd: string, args: string | undefined}) : appResponse => ({
+    data: execute(data.cmd, data.args),
+    expedition: getState()
+});
