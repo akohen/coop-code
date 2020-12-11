@@ -1,12 +1,20 @@
-import { execute, getState, cmdReturn } from "./actions";
+import { execute, getState } from "./actions";
+import { cmdReturn } from "./typings";
 
 type appResponse = {
-    errors?: string,
-    data?: cmdReturn,
-    expedition: unknown
+  errors?: string,
+  data?: cmdReturn,
+  expedition?: unknown
 }
 
-export default (data: {cmd: string, args: string | undefined}) : appResponse => ({
-    data: execute(data.cmd, data.args),
-    expedition: getState()
-});
+export default (data: {[idx:string]:unknown}) : appResponse => {
+  if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
+    const args = data["cmd"].split(/ +(.*)/)
+    return {
+      data: execute(args[0], args[1]),
+      expedition: getState()
+    }
+  } else return {
+    errors: "no command provided"
+  }
+};

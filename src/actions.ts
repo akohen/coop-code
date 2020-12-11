@@ -1,32 +1,28 @@
 import expedition from './expedition';
-export type cmdReturn = {
-  code: number,
-  out?: string,
-  err?: string
-}
+import { cmdReturn, Player } from "./typings";
+import { commands, isAvailable } from './commands/index';
 
-type cmdFunction = (args?: string) => cmdReturn
 
-const availableCommands: {[idx: string] : cmdFunction} = {
-  node: (args) => {
-    const nodeId = Number(args)
-    expedition.players[0].location = nodeId
-    return {code:1, out:expedition.nodes[nodeId]}
-  },
-  echo: (args) => ({code:1, out: args}),
-  err: (args) => ({code: -1, err: args}),
-  foo: () => ({code: -12}),
+
+function getPlayer(id: number): Player {
+  return expedition.players[id]
 }
 
 function execute(cmd: string, args?: string) : cmdReturn {
-  if (availableCommands[cmd] != undefined) {
-    return availableCommands[cmd](args)
+  const ctx = {player: getPlayer(0), expedition}
+  if (isAvailable(ctx,cmd)) {
+    return {code:1, out:commands[cmd].run(ctx, args)}
+  } else if (cmd == 'set' && args != undefined) {
+    return expedition.set(args)
   }
-  return {code: -1}
+  return {code: -1, err: "unknown command"}
 }
 
-function getState() {
-  return expedition;
+function getState(): unknown {
+  return {
+    players: expedition.players,
+    status: expedition.isComplete(),
+  }
 }
 
 export { execute, getState }
