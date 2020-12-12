@@ -5,10 +5,13 @@ import { foo } from "./foo";
 import { unavailable } from "./unavailable";
 import { ls } from "./ls";
 import { read } from "./read";
+import { connect } from "./connect";
+import { exit } from "./exit";
 
-const commands:{[cmdName: string]: Command} = {echo, help, foo, unavailable, ls, read};
+const commands:{[cmdName: string]: Command} = {echo, help, foo, unavailable, ls, read, connect, exit};
 
 function isAvailable(ctx: Context, cmdName: string): boolean {
+  if(commands[cmdName] == undefined) return false
   return Boolean(!commands[cmdName].isAvailable || commands[cmdName].isAvailable?.(ctx))
 }
 

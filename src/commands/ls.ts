@@ -13,5 +13,5 @@ export const ls:Command = {
       return "No files"
     }
   },
-  help: () => "Returns the arguments passed"
+  help: () => "Lists the available files"
 };

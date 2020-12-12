@@ -8,5 +8,5 @@ export const read:Command = {
     }
     return "File not found"
   },
-  help: () => "Returns the arguments passed"
+  help: () => "Reads the content of a file"
 };
