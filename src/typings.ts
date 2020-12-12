@@ -12,6 +12,7 @@ export interface Node {
     value: number,
     error: string,
   },
+  files?: {[name: string]: string}
 }
 
 export type Player = {
@@ -21,9 +22,13 @@ export type Player = {
 }
 
 export type Command = {
-  run: (ctx: unknown, args?: string) => string | undefined,
+  run: (ctx: Context, args?: string) => string | undefined,
   help?: (isLongHelp: boolean) => string,
   isAvailable?: (ctx: Context) => boolean,
 }
 
-export type Context = unknown
+export type Expedition = {
+  nodes: {[name: string]: Node}
+}
+
+export type Context = {player: Player, expedition: Expedition}

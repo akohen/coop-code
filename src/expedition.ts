@@ -2,7 +2,13 @@ import { cmdReturn, Node, Player } from './typings';
 
 
 const nodes: {[idx: string]:Node} = {
-  start: {welcome:"Welcome to this tutorial.", commands:[], connected:["eng"]},
+  start: {
+    welcome:"Welcome to this tutorial.",
+    commands:[],
+    connected:["eng"],
+    files: {foo:"bar", file2:`file2
+multi-line content`},
+  },
   eng: {welcome:""},
   doc: {welcome:`Testing a multi-line welcome text.
 This is the second line.
@@ -10,7 +16,7 @@ This is the second line.
 Last line`},
 };
 
-const players:[Player] = [{id:'Bob', name: 'Bob', nodes: ["start"]}]
+const players:[Player] = [{id:'Bob', name: 'Bob', nodes: ["doc"]}]
 const isComplete = ():boolean => true
 const set = (cmd: string): cmdReturn => {
   const args = cmd.split(" ")
