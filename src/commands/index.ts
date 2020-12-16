@@ -7,8 +7,19 @@ import { ls } from "./ls";
 import { read } from "./read";
 import { connect } from "./connect";
 import { exit } from "./exit";
+import { set } from "./set";
 
-const commands:{[cmdName: string]: Command} = {echo, help, foo, unavailable, ls, read, connect, exit};
+const commands:{[cmdName: string]: Command} = {
+  echo, 
+  help, 
+  foo, 
+  unavailable, 
+  ls, 
+  read, 
+  connect, 
+  exit,
+  set,
+};
 
 function isAvailable(ctx: Context, cmdName: string): boolean {
   if(commands[cmdName] == undefined) return false

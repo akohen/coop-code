@@ -1,3 +1,5 @@
+import { Expedition, Player } from "./expedition"
+
 export type cmdReturn = {
   code: number,
   out?: string,
@@ -15,20 +17,10 @@ export interface Node {
   files?: {[name: string]: string}
 }
 
-export type Player = {
-  id: string,
-  name: string,
-  nodes: [string],
-}
-
 export type Command = {
   run: (ctx: Context, args?: string) => string | undefined,
   help?: (isLongHelp: boolean) => string,
   isAvailable?: (ctx: Context) => boolean,
-}
-
-export type Expedition = {
-  nodes: {[name: string]: Node}
 }
 
 export type Context = {player: Player, expedition: Expedition}

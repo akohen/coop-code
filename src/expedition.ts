@@ -1,5 +1,51 @@
-import { cmdReturn, Node, Player } from './typings';
+import { Context, Node } from './typings';
 
+class Player {
+  name: string;
+  nodes: [string];
+  expedition: Expedition;
+
+  constructor(name: string, start: string, expedition: Expedition) {
+    this.name = name
+    this.nodes = [start]
+    this.expedition = expedition
+  }
+
+  get currentNode(): Node {
+    return this.expedition.nodes[this.currentNodeName]
+  }
+
+  get currentNodeName(): string {
+    return this.nodes[this.nodes.length-1]
+  }
+
+  get currentDepth(): number {
+    return this.nodes.length
+  }
+}
+
+class Expedition {
+  players: {[id: string]:Player};
+  nodes: {[idx: string]:Node};
+  setters: { [id: string]: (ctx: Context, args: string) => string; } | undefined
+  variables: {[id: string]: string | number};
+
+  constructor(
+      nodes: {[idx: string]:Node}, 
+      setters: { [id: string]: (ctx: Context, args: string) => string; } | undefined) 
+  {
+    this.players = {};
+    this.nodes = nodes;
+    this.setters = setters
+    this.variables = {}
+  }
+
+  get isComplete():boolean { return false }
+  addPlayer(name: string, start: string): Expedition {
+    this.players[name] = new Player(name, start, this)
+    return this
+  }
+}
 
 const nodes: {[idx: string]:Node} = {
   start: {
@@ -14,18 +60,20 @@ multi-line content`},
 This is the second line.
 
 Last line`},
+  locked: {
+    welcome: "",
+  }
 };
 
-const players:[Player] = [{id:'Bob', name: 'Bob', nodes: ["doc"]}]
-const isComplete = ():boolean => true
-const set = (cmd: string): cmdReturn => {
-  const args = cmd.split(" ")
-  if (args[0] == "answer" && args[1] == '42') {
-    return {code:1, out:"finished"}
+const setters = {
+  foo: (ctx: Context, arg: string) => {
+    ctx.expedition.variables['foo'] = Number(arg)
+    console.log(ctx.expedition.variables)
+    return ''
   }
-  return {code:1, out:"OK"}
-}
+};
 
-const expedition = {nodes, players, isComplete, set}
 
-export default expedition;
+const expedition = new Expedition(nodes, setters).addPlayer('bob', 'start').addPlayer('foo', 'start')
+
+export { expedition, Player, Expedition };
