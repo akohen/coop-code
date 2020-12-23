@@ -10,7 +10,10 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.send('Express + TypeScript Server'));
 
-app.post('/', (req, res) => res.json(game(req.body)));
+app.post('/', (req, res) => {
+  const result = game(req.body)
+  res.status((result.errors) ? 400 : 200).json(result)
+});
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);

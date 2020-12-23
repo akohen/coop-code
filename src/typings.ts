@@ -1,11 +1,5 @@
 import { Expedition, Player } from "./expedition"
 
-export type cmdReturn = {
-  code: number,
-  out?: string,
-  err?: string
-}
-export type cmdFunction = (args?: string) => cmdReturn
 export interface Node {
   welcome: string,
   commands?: Array<string>,

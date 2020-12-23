@@ -1,5 +1,4 @@
 import { expedition, Player } from './expedition';
-import { cmdReturn } from "./typings";
 import { commands, isAvailable } from './commands/index';
 
 
@@ -8,12 +7,12 @@ function getPlayer(id: string): Player {
   return expedition.players[id]
 }
 
-function execute(cmd: string, args?: string) : cmdReturn {
+function execute(cmd: string, args?: string) : string | undefined{
   const ctx = {player: getPlayer('foo'), expedition}
   if (isAvailable(ctx,cmd)) {
-    return {code:1, out:commands[cmd].run(ctx, args)}
+    return commands[cmd].run(ctx, args)
   }
-  return {code: -1, err: "unknown command"}
+  throw new Error('Invalid command')
 }
 
 function getState(): unknown {
