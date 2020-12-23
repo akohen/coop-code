@@ -1,9 +1,10 @@
-import { Context, Node } from './typings';
+import { Context, Node, Runnable } from './typings';
 
 class Player {
-  name: string;
-  nodes: [string];
-  expedition: Expedition;
+  name: string
+  nodes: [string]
+  expedition: Expedition
+  input?: Runnable
 
   constructor(name: string, start: string, expedition: Expedition) {
     this.name = name
@@ -27,12 +28,12 @@ class Player {
 class Expedition {
   players: {[id: string]:Player};
   nodes: {[idx: string]:Node};
-  setters: { [id: string]: (ctx: Context, args: string) => string; } | undefined
-  variables: {[id: string]: string | number};
+  setters: { [id: string]: Runnable } | undefined
+  variables: {[id: string]: string | number | boolean};
 
   constructor(
       nodes: {[idx: string]:Node}, 
-      setters: { [id: string]: (ctx: Context, args: string) => string; } | undefined) 
+      setters: { [id: string]: Runnable } | undefined) 
   {
     this.players = {};
     this.nodes = nodes;
@@ -61,16 +62,27 @@ This is the second line.
 
 Last line`},
   locked: {
-    welcome: () => {
-      throw new Error('locked')
-      return ""
+    welcome: (ctx) => {
+      if(!ctx.expedition.variables['unlocked']) {
+        ctx.player.input = (ctx, args) => {
+          delete ctx.player.input
+          if(args == '42') {
+            ctx.player.nodes.push('locked')
+            ctx.expedition.variables['unlocked'] = true
+            return 'Unlocking'
+          }
+          throw new Error('locked')
+        }
+        throw new Error('locked')
+      }
+      return "Unlocked"
     },
     commands: ['unavailable']
   }
 };
 
 const setters = {
-  foo: (ctx: Context, arg: string) => {
+  foo: (ctx: Context, arg?: string) => {
     ctx.expedition.variables['foo'] = Number(arg)
     console.log(ctx.expedition.variables)
     return ''

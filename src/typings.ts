@@ -7,6 +7,8 @@ export type appResponse = {
   expedition?: unknown
 }
 
+export type Runnable = (ctx: Context, args?: string) => string | undefined;
+
 export interface Node {
   welcome: (ctx:Context) => string,
   commands?: Array<string>,
@@ -16,7 +18,7 @@ export interface Node {
 }
 
 export type Command = {
-  run: (ctx: Context, args?: string) => string | undefined,
+  run: Runnable,
   help?: (isLongHelp: boolean) => string,
   isAvailable?: (ctx: Context) => boolean,
 }

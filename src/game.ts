@@ -8,10 +8,9 @@ function getPlayer(id: string): Player {
 
 export default (data: {[idx:string]:unknown}) : appResponse => {
   if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
-    const args = data["cmd"].split(/ +(.*)/)
     try { // TODO: distinguish game error output from API errors (data:errors vs errors)
       const ctx = {player: getPlayer('foo'), expedition}
-      return execute(ctx, args[0], args[1])
+      return execute(ctx, data['cmd'])
     } catch (error) {
       return {
         errors: error.message
