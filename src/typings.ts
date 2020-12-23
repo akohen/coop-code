@@ -1,13 +1,16 @@
 import { Expedition, Player } from "./expedition"
 
+export type appResponse = {
+  errors?: string,
+  output?: string,
+  prompt?: string,
+  expedition?: unknown
+}
+
 export interface Node {
-  welcome: string,
+  welcome: (ctx:Context) => string,
   commands?: Array<string>,
   connected?: Array<string>,
-  lock?:{
-    value: number,
-    error: string,
-  },
   files?: {[name: string]: string},
   isAvailable?: (ctx:Context) => boolean,
 }

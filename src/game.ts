@@ -1,12 +1,6 @@
-import { execute, getState } from "./actions";
+import { execute } from "./actions";
 import { expedition, Player } from './expedition';
-
-type appResponse = {
-  errors?: string,
-  output?: string,
-  prompt?: string,
-  expedition?: unknown
-}
+import { appResponse } from "./typings";
 
 function getPlayer(id: string): Player {
   return expedition.players[id]
@@ -15,12 +9,9 @@ function getPlayer(id: string): Player {
 export default (data: {[idx:string]:unknown}) : appResponse => {
   if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
     const args = data["cmd"].split(/ +(.*)/)
-    try {
+    try { // TODO: distinguish game error output from API errors (data:errors vs errors)
       const ctx = {player: getPlayer('foo'), expedition}
-      return {
-        output: execute(ctx, args[0], args[1]),
-        expedition: {state:getState(), path: getPlayer('foo').nodes}
-      }
+      return execute(ctx, args[0], args[1])
     } catch (error) {
       return {
         errors: error.message

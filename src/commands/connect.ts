@@ -5,6 +5,7 @@ export const connect:Command = {
     if(args != undefined && ctx.expedition.nodes[args] != undefined) {
       const targetNode = ctx.expedition.nodes[args]
       if(targetNode.isAvailable == undefined || targetNode.isAvailable(ctx)) {
+        const welcome = ctx.expedition.nodes[args].welcome(ctx)
         if(ctx.player.nodes.includes(args)) {
           while(ctx.player.currentNodeName != args) {
             ctx.player.nodes.pop()
@@ -12,7 +13,7 @@ export const connect:Command = {
         } else {
           ctx.player.nodes.push(args)
         }
-        return ctx.expedition.nodes[args].welcome
+        return welcome
       }
     }
     return `Could not resolve hostname ${args}`

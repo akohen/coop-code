@@ -1,6 +1,6 @@
 import { expedition, Player } from './expedition';
 import { commands, isAvailable } from './commands/index';
-import { Context } from './typings';
+import { appResponse, Context } from './typings';
 
 
 
@@ -8,11 +8,18 @@ function getPlayer(id: string): Player {
   return expedition.players[id]
 }
 
-function execute(ctx: Context, cmd: string, args?: string) : string | undefined{
+function execute(ctx: Context, cmd: string, args?: string) : appResponse {
+  let output, errors
   if (isAvailable(ctx,cmd)) {
-    return commands[cmd].run(ctx, args)
+    try { output = commands[cmd].run(ctx, args) } 
+    catch (error) { errors = error.message }
+  } else { errors = 'Invalid command' }
+  
+  return {
+    errors,
+    output,
+    expedition: {state:getState(), path: getPlayer('foo').nodes}
   }
-  throw new Error('Invalid command')
 }
 
 function getState(): unknown {

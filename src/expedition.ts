@@ -49,19 +49,22 @@ class Expedition {
 
 const nodes: {[idx: string]:Node} = {
   start: {
-    welcome:"Welcome to this tutorial.",
+    welcome:() => "Welcome to this tutorial.",
     commands:[],
     connected:["eng"],
     files: {foo:"bar", file2:`file2
 multi-line content`},
   },
-  eng: {welcome:""},
-  doc: {welcome:`Testing a multi-line welcome text.
+  eng: {welcome:() => ""},
+  doc: {welcome:() => `Testing a multi-line welcome text.
 This is the second line.
 
 Last line`},
   locked: {
-    welcome: "",
+    welcome: () => {
+      throw new Error('locked')
+      return ""
+    },
     commands: ['unavailable']
   }
 };

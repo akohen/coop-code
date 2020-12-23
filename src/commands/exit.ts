@@ -4,7 +4,7 @@ export const exit:Command = {
   run: (ctx: Context) => {
     if(ctx.player.nodes.length > 1) {
       ctx.player.nodes.pop()
-      return ctx.expedition.nodes[ctx.player.nodes[ctx.player.nodes.length-1]].welcome
+      return ctx.player.currentNode.welcome(ctx)
     }
     return `Can not disconnect from this system`
   },
