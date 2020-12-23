@@ -62,6 +62,7 @@ This is the second line.
 Last line`},
   locked: {
     welcome: "",
+    commands: ['unavailable']
   }
 };
 

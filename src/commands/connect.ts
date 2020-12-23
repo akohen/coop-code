@@ -3,8 +3,17 @@ import { Command, Context } from "../typings";
 export const connect:Command = {
   run: (ctx: Context, args) => {
     if(args != undefined && ctx.expedition.nodes[args] != undefined) {
-      ctx.player.nodes.push(args)
-      return ctx.expedition.nodes[args].welcome
+      const targetNode = ctx.expedition.nodes[args]
+      if(targetNode.isAvailable == undefined || targetNode.isAvailable(ctx)) {
+        if(ctx.player.nodes.includes(args)) {
+          while(ctx.player.currentNodeName != args) {
+            ctx.player.nodes.pop()
+          }
+        } else {
+          ctx.player.nodes.push(args)
+        }
+        return ctx.expedition.nodes[args].welcome
+      }
     }
     return `Could not resolve hostname ${args}`
   },

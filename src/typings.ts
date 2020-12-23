@@ -8,7 +8,8 @@ export interface Node {
     value: number,
     error: string,
   },
-  files?: {[name: string]: string}
+  files?: {[name: string]: string},
+  isAvailable?: (ctx:Context) => boolean,
 }
 
 export type Command = {
