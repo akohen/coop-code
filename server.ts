@@ -11,8 +11,12 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => res.send('Express + TypeScript Server'));
 
 app.post('/', (req, res) => {
-  const result = game(req.body)
-  res.status((result.errors) ? 400 : 200).json(result)
+  try {
+    const result = game(req.body)
+    res.status((result.errors) ? 400 : 200).json(result)
+  } catch (error) {
+    res.status(500).json(error.message)
+  }
 });
 
 app.listen(PORT, () => {
