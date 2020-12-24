@@ -1,4 +1,5 @@
-import { Expedition, Player } from "./expedition"
+import { Expedition } from "./expedition"
+import { Player } from "./player";
 
 export type appResponse = {
   errors?: string,

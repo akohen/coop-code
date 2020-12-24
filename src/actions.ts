@@ -1,11 +1,6 @@
-import { expedition, Player } from './expedition';
 import { commands, isAvailable } from './commands/index';
 import { appResponse, Context } from './typings';
 
-
-function getPlayer(id: string): Player {
-  return expedition.players[id]
-}
 
 function execute(ctx: Context, cmd: string) : appResponse {
   let output, errors
@@ -24,14 +19,14 @@ function execute(ctx: Context, cmd: string) : appResponse {
   return {
     errors,
     output,
-    expedition: {state:getState(), path: getPlayer('foo').nodes}
+    expedition: {state:getState(ctx), path: ctx.player.nodes}
   }
 }
 
-function getState(): unknown {
+function getState(ctx: Context): unknown {
   return {
-    player: getPlayer('foo').currentNode,
-    status: expedition.isComplete,
+    player: ctx.player.currentNode,
+    status: ctx.expedition.isComplete,
   }
 }
 

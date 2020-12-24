@@ -1,10 +1,55 @@
 import { execute } from "./actions";
-import { expedition, Player } from './expedition';
-import { appResponse } from "./typings";
+import { Expedition } from './expedition';
+import { Player } from "./player";
+import { appResponse, Context, Node } from "./typings";
 
 function getPlayer(id: string): Player {
   return expedition.players[id]
 }
+
+const nodes: {[idx: string]:Node} = {
+  start: {
+    welcome:() => "Welcome to this tutorial.",
+    commands:[],
+    connected:["eng"],
+    files: {foo:"bar", file2:`file2
+multi-line content`},
+  },
+  eng: {welcome:() => ""},
+  doc: {welcome:() => `Testing a multi-line welcome text.
+This is the second line.
+
+Last line`},
+  locked: {
+    welcome: (ctx) => {
+      if(!ctx.expedition.variables['unlocked']) {
+        ctx.player.input = (ctx, args) => {
+          delete ctx.player.input
+          if(args == '42') {
+            ctx.player.nodes.push('locked')
+            ctx.expedition.variables['unlocked'] = true
+            return 'Unlocking'
+          }
+          throw new Error('locked')
+        }
+        throw new Error('locked')
+      }
+      return "Unlocked"
+    },
+    commands: ['unavailable']
+  }
+};
+
+const setters = {
+  foo: (ctx: Context, arg?: string) => {
+    ctx.expedition.variables['foo'] = Number(arg)
+    console.log(ctx.expedition.variables)
+    return ''
+  }
+};
+
+
+const expedition = new Expedition(nodes, setters).addPlayer('bob', 'start').addPlayer('foo', 'start')
 
 export default (data: {[idx:string]:unknown}) : appResponse => {
   if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
