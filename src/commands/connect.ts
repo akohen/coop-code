@@ -16,7 +16,7 @@ export const connect:Command = {
         return welcome
       }
     }
-    return `Could not resolve hostname ${args}`
+    throw new Error(`Could not resolve hostname ${args}`)
   },
   help: () => `Open a connection to another system`
 };
