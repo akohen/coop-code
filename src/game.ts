@@ -1,11 +1,6 @@
 import { execute } from "./actions";
 import { Expedition } from './expedition';
-import { Player } from "./player";
 import { appResponse, Context, Node } from "./typings";
-
-function getPlayer(id: string): Player {
-  return expedition.players[id]
-}
 
 const nodes: {[idx: string]:Node} = {
   start: {
@@ -49,12 +44,12 @@ const setters = {
 };
 
 
-const expedition = new Expedition(nodes, setters).addPlayer('bob', 'start').addPlayer('foo', 'start')
+const expedition = new Expedition(nodes, setters).addPlayer('bob').addPlayer('foo')
 
 export default (data: {[idx:string]:unknown}) : appResponse => {
   if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
     try { // TODO: distinguish game error output from API errors (data:errors vs errors)
-      const ctx = {player: getPlayer('foo'), expedition}
+      const ctx = {player: expedition.players['foo'], expedition}
       return execute(ctx, data['cmd'])
     } catch (error) {
       return {
