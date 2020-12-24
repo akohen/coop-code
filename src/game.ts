@@ -43,7 +43,6 @@ const setters = {
   }
 };
 
-
 const expedition = new Expedition(nodes, setters).addPlayer('bob').addPlayer('foo')
 
 export default (data: {[idx:string]:unknown}) : appResponse => {

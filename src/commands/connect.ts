@@ -1,11 +1,11 @@
-import { Command, Context } from "../typings";
+import { Command, Context, Node } from "../typings";
 
 export const connect:Command = {
   run: (ctx: Context, args) => {
-    if(args != undefined && ctx.expedition.nodes[args] != undefined) {
-      const targetNode = ctx.expedition.nodes[args]
+    if(args != undefined && ctx.expedition.nodes.get(args) != undefined) {
+      const targetNode: Node = ctx.expedition.nodes.get(args) as Node
       if(targetNode.isAvailable == undefined || targetNode.isAvailable(ctx)) {
-        const welcome = ctx.expedition.nodes[args].welcome(ctx)
+        const welcome = targetNode.welcome(ctx)
         if(ctx.player.nodes.includes(args)) {
           while(ctx.player.currentNodeName != args) {
             ctx.player.nodes.pop()

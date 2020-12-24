@@ -3,24 +3,47 @@ import { Node, Runnable } from './typings';
 
 export class Expedition {
   players: {[id: string]: Player};
-  nodes: {[idx: string]: Node};
-  setters: { [id: string]: Runnable }
+  nodes: Map<string, Node>;
+  setters: Map<string, Runnable>;
   variables: {[id: string]: string | number | boolean};
   addPlayer: (id: string) => Expedition;
 
   constructor(
-      nodes: {[idx: string]:Node}, 
+      nodes?: {[idx: string]: Node}, 
       setters?: { [id: string]: Runnable },
       addPlayer?: (id: string) => Expedition
   ) {
     this.players = {};
-    this.nodes = nodes;
-    this.setters = setters ? setters : {}
+    this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
+    this.setters = setters ? new Map(Object.entries(setters)) : new Map()
     this.variables = {}
     this.addPlayer = (addPlayer) ? addPlayer : (id) => {
       this.players[id] = new Player(id, 'start', this)
       return this
     }
+  }
+
+  exportNodes(): string {
+    const exportNodes: [string, unknown][] = [...this.nodes].map(([key, value]) => {
+      return [ key, {
+        ...value,
+        welcome: value.welcome.toString(),
+        isAvailable: value.isAvailable ? value.isAvailable.toString() : undefined,
+      } ]
+    })
+    
+    return JSON.stringify(exportNodes)
+  }
+
+  importNodes(nodes: string): Expedition { // Why did I do this ?
+    const imported:[string,Node][] = JSON.parse(nodes)
+    
+    const importedNodes: [string, Node][] = imported.map(([key, value]) => {
+      const node = {...value, welcome: new Function("return "+ value.welcome.toString())()} as Node
+      return [ key, node ]
+    })
+    this.nodes = new Map(importedNodes)
+    return this
   }
 
   get isComplete():boolean { return false }

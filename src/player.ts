@@ -14,7 +14,10 @@ export class Player {
     }
   
     get currentNode(): Node {
-      return this.expedition.nodes[this.currentNodeName]
+      if(!this.expedition.nodes.has(this.currentNodeName)) {
+        throw new Error('Current node not found')
+      }
+      return this.expedition.nodes.get(this.currentNodeName) as Node
     }
   
     get currentNodeName(): string {

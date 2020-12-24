@@ -2,7 +2,7 @@ import { Command, Context } from "../typings";
 
 export const ls:Command = {
   run: (ctx: Context) => {
-    const currentNode = ctx.expedition.nodes[ctx.player.nodes[ctx.player.nodes.length-1]]
+    const currentNode = ctx.player.currentNode
     if(currentNode.files != undefined) {
       let res = "Files :\n";
       for(const file in currentNode.files) {
