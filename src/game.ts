@@ -4,11 +4,11 @@ import { create } from "./expeditions/test";
 
 const expedition = create().addPlayer('bob').addPlayer('foo')
 
-export default (data: {[idx:string]:unknown}) : appResponse => {
+export default (data: {[idx:string]:unknown}) : {data?:appResponse, errors?:string} => {
   if(data['cmd'] != undefined && typeof data['cmd'] == "string") {
-    try { // TODO: distinguish game error output from API errors (data:errors vs errors)
+    try {
       const ctx = {player: expedition.players['foo'], expedition}
-      return execute(ctx, data['cmd'])
+      return {data:execute(ctx, data['cmd'])}
     } catch (error) {
       return {
         errors: error.message
