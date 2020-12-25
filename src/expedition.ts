@@ -1,11 +1,12 @@
 import { Player } from './player';
-import { Node, Runnable } from './typings';
+import { Command, ExpeditionModule, Node, Runnable } from './typings';
 
 export class Expedition {
   players: {[id: string]: Player};
   nodes: Map<string, Node>;
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
+  commands: Map<string, Command>
   addPlayer: (id: string) => Expedition;
 
   constructor(
@@ -21,6 +22,20 @@ export class Expedition {
       this.players[id] = new Player(id, 'start', this)
       return this
     }
+    this.commands = new Map()
+  }
+
+  addModule({nodes, variables, commands}:ExpeditionModule): Expedition {
+    for (const [name, node] of nodes || []) {
+      this.nodes.set(name, node)
+    }
+    if (variables != undefined) {
+      this.variables = new Map([...this.variables, ...variables])
+    }
+    if (commands != undefined) {
+      this.commands = new Map([...this.commands, ...commands])
+    }
+    return this
   }
 
   export(): string {
@@ -34,12 +49,12 @@ export class Expedition {
   }
 
   exportNodes(): string {
-    const exportNodes: [string, unknown][] = [...this.nodes].map(([key, value]) => ([
-      key, 
+    const exportNodes: [string, unknown][] = [...this.nodes].map(([nodeName, node]) => ([
+      nodeName, 
       {
-        ...value,
-        welcome: value.welcome.toString(),
-        isAvailable: value.isAvailable ? value.isAvailable.toString() : undefined,
+        ...node,
+        welcome: node.welcome.toString(),
+        isAvailable: node.isAvailable ? node.isAvailable.toString() : undefined,
       }
     ]))
     

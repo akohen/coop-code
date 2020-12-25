@@ -1,16 +1,39 @@
-import { commands, isAvailable } from './commands/index';
-import { appResponse, Context } from './typings';
+import { commands } from './commands/index';
+import { appResponse, Command, Context } from './typings';
 
+function isAvailable(ctx: Context, cmd: Command): boolean {
+  return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
+}
 
-function execute(ctx: Context, cmd: string) : appResponse {
+function getAvailable(ctx: Context, cmdName: string): Command | undefined {
+  let cmd = ctx.expedition.commands.get(cmdName)
+  if( cmd && isAvailable(ctx, cmd) ) return cmd
+  cmd = commands.get(cmdName)
+  if( cmd && isAvailable(ctx, cmd) ) return cmd
+  return undefined
+}
+
+function available (ctx: Context): Map<string,Command> {
+  const cmds = new Map();
+  for(const [cmdName, cmd] of commands) {
+    if(isAvailable(ctx, cmd)) cmds.set(cmdName, cmd)
+  }
+  for(const [cmdName, cmd] of ctx.expedition.commands) {
+    if(isAvailable(ctx, cmd)) cmds.set(cmdName, cmd)
+  }
+  return cmds
+}
+
+function execute(ctx: Context, cmdString: string) : appResponse {
   let output, errors
   if (ctx.player.input != undefined) {
-    try { output = ctx.player.input(ctx, cmd) } 
+    try { output = ctx.player.input(ctx, cmdString) } 
     catch (error) { errors = error.message }
-  } else if (cmd !== '') {
-    const args = cmd.split(/ +(.*)/)
-    if (isAvailable(ctx,args[0])) {
-      try { output = commands[args[0]].run(ctx, args[1]) } 
+  } else if (cmdString !== '') {
+    const args = cmdString.split(/ +(.*)/)
+    const cmd = getAvailable(ctx, args[0])
+    if (cmd) {
+      try { output = cmd.run(ctx, args[1]) } 
       catch (error) { errors = error.message }
     }
     else { errors = 'Invalid command' }
@@ -31,5 +54,5 @@ function getState(ctx: Context): unknown {
   }
 }
 
-export { execute, getState }
+export { execute, getState, available, getAvailable }
 

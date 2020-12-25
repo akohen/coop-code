@@ -1,39 +1,22 @@
-import { Command, Context } from "../typings";
+import { Command } from "../typings";
+import { connect } from "./connect";
 import { echo } from "./echo";
-import { help } from "./help";
+import { exit } from "./exit";
 import { foo } from "./foo";
-import { unavailable } from "./unavailable";
+import { help } from "./help";
 import { ls } from "./ls";
 import { read } from "./read";
-import { connect } from "./connect";
-import { exit } from "./exit";
 import { set } from "./set";
+import { unavailable } from "./unavailable";
 
-const commands:{[cmdName: string]: Command} = {
-  echo, 
-  help, 
-  foo, 
-  unavailable, 
-  ls, 
-  read, 
-  connect, 
+export const commands:Map<string, Command> = new Map(Object.entries({
+  connect,
+  echo,
   exit,
+  foo,
+  help,
+  ls,
+  read,
   set,
-};
-
-function isAvailable(ctx: Context, cmdName: string): boolean {
-  if(commands[cmdName] == undefined) return false
-  return Boolean(!commands[cmdName].isAvailable || commands[cmdName].isAvailable?.(ctx))
-}
-
-function available (ctx: Context): {[cmdName: string]: Command} {
-  const cmds: {[cmdName: string]: Command} = {};
-  for(const cmd in commands) {
-    if(isAvailable(ctx, cmd)) {
-      cmds[cmd] = commands[cmd]
-    }
-  }
-  return cmds
-}
-
-export { commands, available, isAvailable };
+  unavailable,
+}));

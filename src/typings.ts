@@ -8,6 +8,11 @@ export type appResponse = {
   expedition?: unknown
 }
 
+export interface ExpeditionModule {
+  nodes?:[string,Node][],
+  variables?: Map<string, string|number|boolean>
+  commands?: Map<string,Command>
+}
 export type Runnable = (ctx: Context, args?: string) => string | undefined;
 
 export interface Node {

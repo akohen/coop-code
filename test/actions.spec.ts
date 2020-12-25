@@ -1,4 +1,4 @@
-import { execute } from "../src/actions";
+import { execute, getAvailable } from "../src/actions";
 import { Expedition } from "../src/expedition";
 import { Node } from "../src/typings";
 
@@ -36,5 +36,10 @@ describe("Action module", () => {
     const result = execute(ctx, "read foo")
     expect(result.output).toBe("bar")
     expect(result.errors).toBeUndefined()
+  })
+
+  it("should give access to expedition commands", () => {
+    ctx.expedition.commands.set('expedition-specific-command',{run:(ctx, args) => (args)})
+    expect(getAvailable(ctx, "expedition-specific-command")).toBeDefined()
   })
 })

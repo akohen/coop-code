@@ -22,9 +22,11 @@ export function create(): Expedition {
       }
     })
     exp.nodes
-    .set('doc2', doc('Welcome',{'name': 'content'}))
-    .set('doc3', doc('Welcome',{'name': 'content'}))
-    .set(...locked('locked2', 'welcome', 'prompt>', 'secret','locked'))
+      .set('doc2', doc('Welcome',{'name': 'content'}))
+      .set('doc3', doc('Welcome',{'name': 'content'}))
+      .set(...locked('locked2', 'welcome', 'prompt>', 'secret','locked'))
+    exp.commands
+      .set('expedition-specific',{run:(ctx, args) => (args)})
   return exp
 }
 
