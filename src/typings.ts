@@ -9,7 +9,7 @@ export type appResponse = {
 }
 
 export interface ExpeditionModule {
-  nodes?:[string,Node][],
+  nodes?: Array<[string,Node]>,
   variables?: Map<string, string|number|boolean>
   commands?: Map<string,Command>
 }
@@ -17,7 +17,7 @@ export type Runnable = (ctx: Context, args?: string) => string | undefined;
 
 export interface Node {
   welcome: (ctx:Context) => string,
-  commands?: Array<string>,
+  tags?: Array<string>,
   connected?: Array<string>,
   files?: {[name: string]: string},
   isAvailable?: (ctx:Context) => boolean,

@@ -6,7 +6,6 @@ import { locked } from "./nodes/locked";
 const nodes: {[idx: string]: Node} = {
   start: {
     welcome:() => "Welcome to this tutorial.",
-    commands:[],
     connected:["eng"],
     files: {foo:"bar", file2:`file2\nmulti-line content`},
   },
