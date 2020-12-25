@@ -27,6 +27,12 @@ export class Expedition {
     return JSON.stringify({'variables':[...this.variables]})
   }
 
+  load(data: string): Expedition {
+    const {variables} = JSON.parse(data)
+    this.variables = new Map(variables)
+    return this
+  }
+
   exportNodes(): string {
     const exportNodes: [string, unknown][] = [...this.nodes].map(([key, value]) => ([
       key, 

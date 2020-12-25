@@ -24,10 +24,10 @@ export function create(): Expedition {
     exp.nodes
     .set('doc2', doc('Welcome',{'name': 'content'}))
     .set('doc3', doc('Welcome',{'name': 'content'}))
-    .set(...locked('locked2', 'welcome', 'prompt', 'secret','locked'))
+    .set(...locked('locked2', 'welcome', 'prompt>', 'secret','locked'))
   return exp
 }
 
 export function load(data: string): Expedition {
-  return create()
+  return create().load(data)
 }
