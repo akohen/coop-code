@@ -5,7 +5,7 @@ export class Expedition {
   players: {[id: string]: Player};
   nodes: Map<string, Node>;
   setters: Map<string, Runnable>;
-  variables: {[id: string]: string | number | boolean};
+  variables: Map<string,string | number | boolean>;
   addPlayer: (id: string) => Expedition;
 
   constructor(
@@ -16,21 +16,26 @@ export class Expedition {
     this.players = {};
     this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
     this.setters = setters ? new Map(Object.entries(setters)) : new Map()
-    this.variables = {}
+    this.variables = new Map()
     this.addPlayer = (addPlayer) ? addPlayer : (id) => {
       this.players[id] = new Player(id, 'start', this)
       return this
     }
   }
 
+  export(): string {
+    return JSON.stringify({'variables':[...this.variables]})
+  }
+
   exportNodes(): string {
-    const exportNodes: [string, unknown][] = [...this.nodes].map(([key, value]) => {
-      return [ key, {
+    const exportNodes: [string, unknown][] = [...this.nodes].map(([key, value]) => ([
+      key, 
+      {
         ...value,
         welcome: value.welcome.toString(),
         isAvailable: value.isAvailable ? value.isAvailable.toString() : undefined,
-      } ]
-    })
+      }
+    ]))
     
     return JSON.stringify(exportNodes)
   }

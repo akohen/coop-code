@@ -19,6 +19,7 @@ function execute(ctx: Context, cmd: string) : appResponse {
   return {
     errors,
     output,
+    prompt: ctx.player.prompt,
     expedition: {state:getState(ctx), path: ctx.player.nodes}
   }
 }

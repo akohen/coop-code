@@ -6,6 +6,7 @@ export class Player {
     nodes: [string]
     expedition: Expedition
     input?: Runnable
+    inputPrompt?: string
   
     constructor(name: string, start: string, expedition: Expedition) {
       this.name = name
@@ -26,5 +27,12 @@ export class Player {
   
     get currentDepth(): number {
       return this.nodes.length
+    }
+
+    get prompt(): string {
+      if (this.inputPrompt != undefined && this.input != undefined) {
+        return this.inputPrompt
+      }
+      return `${this.name}@${this.currentNodeName}>`
     }
   }
