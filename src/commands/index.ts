@@ -6,6 +6,7 @@ import { foo } from "./foo";
 import { help } from "./help";
 import { ls } from "./ls";
 import { read } from "./read";
+import { scan } from "./scan";
 import { set } from "./set";
 import { unavailable } from "./unavailable";
 
@@ -17,6 +18,7 @@ export const commands:Map<string, Command> = new Map(Object.entries({
   help,
   ls,
   read,
+  scan,
   set,
   unavailable,
 }));
