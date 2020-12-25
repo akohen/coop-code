@@ -25,7 +25,7 @@ export interface Node {
 
 export type Command = {
   run: Runnable,
-  help?: (isLongHelp: boolean) => string,
+  help?: (isLongHelp?: boolean) => string,
   isAvailable?: (ctx: Context) => boolean,
 }
 

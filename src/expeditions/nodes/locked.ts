@@ -1,27 +1,40 @@
-import { Node } from "../../typings";
+import { ExpeditionModule } from "../../typings";
 
+/**
+  * A node requiring a password on the first connection
+  * @name Node name
+  * @welcome Text to show on successful connection
+  * @prompt Player prompt
+  * @secret the string to unlock the node
+  * @locked returned as error on connection attempt before unlock
+  * @unlocked Showed once, on unlock. If missing, the welcome text will be shown instead
+  * @fail returned as error on wrong guess. If missing the locked text will be shown instead
+  */
 const locked = (
   name: string,
   welcome: string,
   prompt: string,
   secret: string,
-  locked: string
-): [string, Node] => {
-  return [name, {
+  locked: string,
+  unlock?: string,
+  fail?: string
+): ExpeditionModule => ({
+  nodes: [[name, {
     welcome: (ctx) => {
-      if(ctx.expedition.variables.get(name+'-unlocked')) return welcome
-      ctx.player.inputPrompt = prompt
-      ctx.player.input = (ctx, args) => {
-        delete ctx.player.input
-        delete ctx.player.inputPrompt
-        if(args != secret) throw new Error(locked)
-        ctx.player.nodes.push(name)
-        ctx.expedition.variables.set(name+'-unlocked', true)
-        return welcome
-      }
+      if(ctx.expedition.variables.get(name+'-unlock')) return welcome
+      ctx.player.input = name+'-unlock'
       throw new Error(locked)
     }
-  }]
-}
+  }]],
+  commands: new Map([[name+'-unlock',{
+    run:(ctx, args) => {
+      if(args != secret) throw new Error(fail ? fail : locked)
+      ctx.player.nodes.push(name)
+      ctx.expedition.variables.set(name+'-unlock', true)
+      return unlock ? unlock : welcome
+    },
+    help: () => (prompt)
+  }]])
+})
 
 export { locked }

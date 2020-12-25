@@ -1,12 +1,11 @@
 import { Expedition } from "./expedition"
-import { Runnable, Node } from "./typings"
+import { Node } from "./typings"
 
 export class Player {
     name: string
     nodes: [string]
     expedition: Expedition
-    input?: Runnable
-    inputPrompt?: string
+    input?: string
   
     constructor(name: string, start: string, expedition: Expedition) {
       this.name = name
@@ -30,8 +29,10 @@ export class Player {
     }
 
     get prompt(): string {
-      if (this.inputPrompt != undefined && this.input != undefined) {
-        return this.inputPrompt
+      const cmd = this.expedition.commands.get(this.input as string)
+      if (cmd) {
+        if(cmd.help) return cmd.help()
+        return '>'
       }
       return `${this.name}@${this.currentNodeName}>`
     }

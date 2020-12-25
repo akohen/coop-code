@@ -27,7 +27,11 @@ function available (ctx: Context): Map<string,Command> {
 function execute(ctx: Context, cmdString: string) : appResponse {
   let output, errors
   if (ctx.player.input != undefined) {
-    try { output = ctx.player.input(ctx, cmdString) } 
+    try {
+      const cmd = ctx.expedition.commands.get(ctx.player.input)
+      delete ctx.player.input
+      output = cmd?.run(ctx, cmdString)
+    }
     catch (error) { errors = error.message }
   } else if (cmdString !== '') {
     const args = cmdString.split(/ +(.*)/)
