@@ -11,7 +11,11 @@ describe("Commands", () => {
         files: {foo:"bar", file2:`file2\nmulti-line content`},
       },
       node2: { welcome:() => "node2 hello" },
-      node3: { welcome:() => "node3 hello" },
+      node3: { welcome:() => "node3 hello", tags: ['node4-access'] },
+      node4: { 
+        welcome:() => "available from node3 only",
+        isAvailable: (ctx) => (ctx.player.currentNode.tags != undefined && ctx.player.currentNode.tags.includes('node4-access'))
+      },
     };
     
     const expedition = new Expedition(nodes).addPlayer('bob').addPlayer('foo')
@@ -46,6 +50,13 @@ describe("Commands", () => {
       execute(ctx, "connect node3")
       expect(execute(ctx, "connect node2").output).toBe("node2 hello")
       expect(ctx.player.nodes).toStrictEqual(['start', 'node2'])
+    })
+    it("should not be able to connect to an unavailable node", () => {
+      expect(execute(ctx, "connect node4").errors).toBeDefined()
+    })
+    it("should be able to connect to an available node", () => {
+      execute(ctx, "connect node3")
+      expect(execute(ctx, "connect node4").output).toBe('available from node3 only')
     })
   })
 
