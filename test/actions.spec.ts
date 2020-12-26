@@ -14,11 +14,12 @@ describe("Action module", () => {
     },
   };
   
-  const expedition = new Expedition(nodes).addPlayer(new Player('foo'))
+  const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
   const backend = {
     getPlayer: (player: string) => (new Player(player)),
     getExpedition: () => (expedition),
-    listExpeditions: () => (['test'])
+    listExpeditions: () => (['test']),
+    createExpedition: (e:Expedition) => e,
   }
   const ctx = {player: expedition.players['foo'], expedition, backend}
 

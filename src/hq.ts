@@ -7,7 +7,7 @@ const nodes: {[idx: string]: Node} = {
     welcome:() => "Welcome to the HQ",
   },
 };
-const hq = new Expedition(nodes)
+const hq = new Expedition('hq', nodes)
 
 const cmd: Command = {
   run: (ctx, args) => {
@@ -33,7 +33,7 @@ const cmd: Command = {
     }
     return ctx.backend.listExpeditions().join('\n')
   }
-  return undefined
+  return cmd.help?.(true)
 }, help: (long) => long ? 'long help' : 'Create and join expeditions'}
 hq.commands.set('expedition', cmd)
 

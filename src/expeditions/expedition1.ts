@@ -11,7 +11,7 @@ const nodes: {[idx: string]: Node} = {
 };
 
 function create(): Expedition {
-  const exp = new Expedition(
+  const exp = new Expedition('exp1',
     nodes,{
       foo: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('foo', Number(arg))

@@ -8,12 +8,16 @@ export class Expedition {
   variables: Map<string,string | number | boolean>;
   commands: Map<string, Command>
   startNode: (ctx: Context) => string
+  id?: string
+  type: string
 
   constructor(
-      nodes?: {[idx: string]: Node}, 
-      setters?: { [id: string]: Runnable },
-      startNode?: (ctx: Context) => string
+    type: string,
+    nodes?: {[idx: string]: Node}, 
+    setters?: { [id: string]: Runnable },
+    startNode?: (ctx: Context) => string
   ) {
+    this.type = type
     this.players = {};
     this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
     this.setters = setters ? new Map(Object.entries(setters)) : new Map()

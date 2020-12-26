@@ -24,6 +24,7 @@ export const backend = {
   createExpedition(exp: Expedition): Expedition {
     const id = [...Array(6)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
     expeditions.set(id, exp)
+    exp.id = id
     return exp
   },
 }
