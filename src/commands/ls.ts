@@ -4,11 +4,7 @@ export const ls:Command = {
   run: (ctx: Context) => {
     const currentNode = ctx.player.currentNode
     if(currentNode.files != undefined) {
-      let res = "Files :\n";
-      for(const file in currentNode.files) {
-        res += `${file}\n`
-      }
-      return res
+      return `Available files:\n  ${Object.keys(currentNode.files).join("\n  ")}`
     } else {
       return "No files"
     }
