@@ -1,4 +1,5 @@
 import { Expedition } from "../src/expedition";
+import { Player } from "../src/player";
 import { Context, Node } from "../src/typings";
 
 describe("Expedition", () => {
@@ -13,8 +14,13 @@ describe("Expedition", () => {
       node3: { welcome:() => "node3 hello" },
     };
     
-    const expedition = new Expedition(nodes).addPlayer('bob').addPlayer('foo')
-    ctx = {player: expedition.players['foo'], expedition}
+    const expedition = new Expedition(nodes).addPlayer(new Player('bob'))
+    const backend = {
+      getPlayer: (player: string) => (new Player(player)),
+      getExpedition: () => (expedition),
+      listExpeditions: () => (['test'])
+    }
+    ctx = {player: expedition.players['foo'], expedition, backend}
   })
 
   describe("Import/export", () => {

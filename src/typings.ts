@@ -28,4 +28,11 @@ export type Command = {
   isAvailable?: (ctx: Context) => boolean,
 }
 
-export type Context = {player: Player, expedition: Expedition}
+export interface Backend {
+  getPlayer: (player: string) => Player | undefined,
+  getExpedition(name: string): Expedition | undefined,
+  listExpeditions(): Array<string>,
+  createExpedition(exp: Expedition): Expedition,
+}
+
+export type Context = {player: Player, expedition: Expedition, backend: Backend}

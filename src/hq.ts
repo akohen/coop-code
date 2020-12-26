@@ -1,5 +1,6 @@
 import { Expedition } from "./expedition";
-import { Node } from "./typings";
+import { expeditionFactories } from "./expeditions";
+import { Command, Node } from "./typings";
 
 const nodes: {[idx: string]: Node} = {
   hq: {
@@ -7,16 +8,33 @@ const nodes: {[idx: string]: Node} = {
   },
 };
 const hq = new Expedition(nodes)
-hq.commands.set('expedition',{run: (ctx, args) => {
+
+const cmd: Command = {
+  run: (ctx, args) => {
   if (args == undefined) {
-    return
+    return cmd.help?.(true)
   }
-  if (args == 'create') {
-    // expedition creation
-  } else if (args.startsWith('join ')) {
-    // expedition join
+  const argv = args.split(' ').filter(e => e)
+  if (argv[0] == 'create') {
+    if(argv[1]) {
+      const factory = expeditionFactories.get(argv[1])
+      if(!factory) throw new Error(`Unable to create expedition ${argv[1]}`)
+      const expedition = ctx.backend.createExpedition(factory.create())
+      expedition.addPlayer(ctx.player)
+      return ctx.player.currentNode.welcome(ctx)
+    }
+    return Array.from(expeditionFactories.keys()).join('\n')
+  } else if (argv[0] == 'join') {
+    if(argv[1]) {
+      const expedition = ctx.backend.getExpedition(argv[1])
+      if(!expedition) throw new Error(`Expedition ${argv[1]} not found`)
+      expedition.addPlayer(ctx.player)
+      return ctx.player.currentNode.welcome(ctx)
+    }
+    return ctx.backend.listExpeditions().join('\n')
   }
   return undefined
-}})
+}, help: (long) => long ? 'long help' : 'Create and join expeditions'}
+hq.commands.set('expedition', cmd)
 
 export { hq }

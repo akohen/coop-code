@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import game from './src/game';
+import { backend } from './src/backends/memory';
 
 const app = express();
 const PORT = 8000;
@@ -17,7 +18,7 @@ app.get('/', function (req, res) {
 
 app.post('/', (req, res) => {
   try {
-    const result = game(req.body)
+    const result = game(req.body['player'], req.body['cmd'], backend)
     res.status((result.errors) ? 400 : 200).json(result)
   } catch (error) {
     res.status(500).json(error.message)

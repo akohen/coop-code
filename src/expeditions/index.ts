@@ -2,6 +2,7 @@ import { Expedition } from "../expedition";
 import { Player } from "../player";
 
 import { test } from "./test";
+import { exp1 } from "./expedition1";
 
 export type ExpeditionFactory = {
   create: () => Expedition,
@@ -9,6 +10,7 @@ export type ExpeditionFactory = {
   isAvailable?: (player: Player) => boolean,
 }
 
-export const allExpeditions:Map<string, ExpeditionFactory> = new Map(Object.entries({
+export const expeditionFactories:Map<string, ExpeditionFactory> = new Map(Object.entries({
   tutorial: test,
+  exp1,
 }));

@@ -1,16 +1,15 @@
 import { execute } from "./actions";
-import { appResponse } from "./typings";
-import { getPlayer } from "./backends/memory";
+import { appResponse, Backend } from "./typings";
 
 
-export default (data: {[idx:string]:unknown}) : {data?:appResponse, errors?:string} => {
-  if(data['cmd'] == undefined || typeof data['cmd'] != "string") return {errors: "no command provided"}
-  if(data['player'] == undefined || typeof data['player'] != "string") return {errors: "no playerid provided"}
-  const player = getPlayer(data['player'])
+export default (playerName: string, command: string, backend: Backend) : {data?:appResponse, errors?:string} => {
+  if(command == undefined || typeof command != "string") return {errors: "no command provided"}
+  if(playerName == undefined || typeof playerName != "string") return {errors: "no playerid provided"}
+  const player = backend.getPlayer(playerName)
   if(!player) return {errors: "player not found"}
   try {
-    const ctx = {player, expedition:player.expedition}
-    return {data:execute(ctx, data['cmd'])}
+    const ctx = {player, expedition:player.expedition, backend}
+    return {data:execute(ctx, command)}
   } catch (error) {
     return {
       errors: error.message

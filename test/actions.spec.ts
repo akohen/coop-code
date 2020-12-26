@@ -1,5 +1,6 @@
 import { execute, getAvailable } from "../src/actions";
 import { Expedition } from "../src/expedition";
+import { Player } from "../src/player";
 import { Node } from "../src/typings";
 
 
@@ -13,8 +14,13 @@ describe("Action module", () => {
     },
   };
   
-  const expedition = new Expedition(nodes).addPlayer('bob').addPlayer('foo')
-  const ctx = {player: expedition.players['foo'], expedition}
+  const expedition = new Expedition(nodes).addPlayer(new Player('foo'))
+  const backend = {
+    getPlayer: (player: string) => (new Player(player)),
+    getExpedition: () => (expedition),
+    listExpeditions: () => (['test'])
+  }
+  const ctx = {player: expedition.players['foo'], expedition, backend}
 
   it("should be able to execute a test", () => {
     expect(true).toBeTruthy()
