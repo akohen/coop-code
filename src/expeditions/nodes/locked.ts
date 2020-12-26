@@ -33,7 +33,8 @@ const locked = (
       ctx.expedition.variables.set(name+'-unlock', true)
       return unlock ? unlock : welcome
     },
-    help: () => (prompt)
+    help: () => (prompt),
+    isAvailable: () => false
   }]])
 })
 

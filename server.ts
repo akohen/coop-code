@@ -7,8 +7,13 @@ const PORT = 8000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-app.get('/', (req, res) => res.send('Express + TypeScript Server'));
+
+app.get('/', function (req, res) {
+  res.sendFile('public/console.html' , { root : __dirname});
+});
+
 
 app.post('/', (req, res) => {
   try {
