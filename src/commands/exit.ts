@@ -6,6 +6,10 @@ export const exit:Command = {
       ctx.player.nodes.pop()
       return ctx.player.currentNode.welcome(ctx)
     }
+    if(ctx.player.currentNodeName != 'hq') {
+      ctx.player.returnToHQ()
+      return ctx.player.currentNode.welcome(ctx)
+    }
     throw new Error(`Cannot disconnect from this system`)
   },
   help: () => `Disconnect from a remote system`

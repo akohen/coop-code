@@ -1,18 +1,23 @@
 import { Expedition } from "./expedition"
+import { hq } from "./hq"
 import { Node } from "./typings"
 
 export class Player {
     name: string
-    nodes: [string]
-    expedition: Expedition
+    nodes!: [string]
+    expedition!: Expedition
     input?: string
   
-    constructor(name: string, start: string, expedition: Expedition) {
+    constructor(name: string) {
       this.name = name
-      this.nodes = [start]
-      this.expedition = expedition
+      this.returnToHQ()
     }
   
+    returnToHQ(): void {
+      this.expedition = hq
+      this.nodes = ['hq']
+    }
+    
     get currentNode(): Node {
       if(!this.expedition.nodes.has(this.currentNodeName)) {
         throw new Error('Current node not found')
@@ -29,10 +34,12 @@ export class Player {
     }
 
     get prompt(): string {
-      const cmd = this.expedition.commands.get(this.input as string)
-      if (cmd) {
-        if(cmd.help) return cmd.help()
-        return '>'
+      if(this.expedition && this.input) {
+        const cmd = this.expedition.commands.get(this.input as string)
+        if (cmd) {
+          if(cmd.help) return cmd.help()
+          return '>'
+        }
       }
       return `${this.name}@${this.currentNodeName}>`
     }

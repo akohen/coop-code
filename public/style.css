@@ -5,7 +5,7 @@ body {
   }
 
  .terminal {
-  --color: rgba(200, 200, 200, 0.99);
+  --color: rgba(150, 150, 150, 0.99);
   --background: #111;
   --size: 1.1;
 }

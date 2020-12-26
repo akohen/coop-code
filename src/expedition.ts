@@ -1,5 +1,5 @@
 import { Player } from './player';
-import { Command, ExpeditionModule, Node, Runnable } from './typings';
+import { Command, Context, ExpeditionModule, Node, Runnable } from './typings';
 
 export class Expedition {
   players: {[id: string]: Player};
@@ -7,22 +7,26 @@ export class Expedition {
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
   commands: Map<string, Command>
-  addPlayer: (id: string) => Expedition;
+  startNode: (ctx: Context) => string
 
   constructor(
       nodes?: {[idx: string]: Node}, 
       setters?: { [id: string]: Runnable },
-      addPlayer?: (id: string) => Expedition
+      startNode?: (ctx: Context) => string
   ) {
     this.players = {};
     this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
     this.setters = setters ? new Map(Object.entries(setters)) : new Map()
     this.variables = new Map()
-    this.addPlayer = (addPlayer) ? addPlayer : (id) => {
-      this.players[id] = new Player(id, 'start', this)
-      return this
-    }
+    this.startNode = (startNode) ? startNode : () => { return 'start'}
     this.commands = new Map()
+  }
+
+  addPlayer(player: Player): Expedition {
+    this.players[player.name] = player
+    player.expedition = this
+    player.nodes = ['start']
+    return this
   }
 
   addModule({nodes, variables, commands}:ExpeditionModule): Expedition {

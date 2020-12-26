@@ -18,7 +18,6 @@ export type Runnable = (ctx: Context, args?: string) => string | undefined;
 export interface Node {
   welcome: (ctx:Context) => string,
   tags?: Array<string>,
-  connected?: Array<string>,
   files?: {[name: string]: string},
   isAvailable?: (ctx:Context) => boolean,
 }

@@ -8,7 +8,6 @@ describe("Action module", () => {
   const nodes: {[idx: string]:Node} = {
     start: {
       welcome:() => "Welcome to this tutorial.",
-      connected:["eng"],
       files: {foo:"bar", file2:`file2
   multi-line content`},
     },

@@ -7,7 +7,7 @@ export const scan:Command = {
       if(!path.includes(nodeName) && (!node.isAvailable || node.isAvailable(ctx)))
         return nodeName
     }).filter(e=>!!e).join('\n  ')
-    return `Current connection path:\n  ${path.join(' => ')}\nAvailable nodes:\n  ${available}`
+    return `Current connection path:\n  ${path.join(' => ')}${available ? '\nAvailable nodes:\n  '+available : ''}`
   },
   help: () => "Shows the available nodes"
 };

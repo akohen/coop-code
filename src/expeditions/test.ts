@@ -6,12 +6,11 @@ import { locked } from "./nodes/locked";
 const nodes: {[idx: string]: Node} = {
   start: {
     welcome:() => "Welcome to this tutorial.",
-    connected:["eng"],
     files: {foo:"bar", file2:`file2\nmulti-line content`},
   },
 };
 
-export function create(): Expedition {
+function create(): Expedition {
   const exp = new Expedition(
     nodes,{
       foo: (ctx: Context, arg?: string) => {
@@ -29,6 +28,8 @@ export function create(): Expedition {
   return exp
 }
 
-export function load(data: string): Expedition {
+function load(data: string): Expedition {
   return create().load(data)
 }
+
+export const test = {create, load}
