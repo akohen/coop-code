@@ -43,6 +43,12 @@ function execute(ctx: Context, cmdString: string) : appResponse {
     else { errors = 'Invalid command' }
   }
 
+  if(ctx.player.expedition.isComplete) {
+    output = output ? output + '\n' : ''
+    output += 'Expedition completed !'
+    ctx.player.returnToHQ()
+  }
+
   return {
     errors,
     output,

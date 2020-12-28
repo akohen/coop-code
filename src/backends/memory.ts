@@ -6,7 +6,7 @@ const players = new Map()
 players.set('foo', new Player('foo'))
 players.set('bob', new Player('bob'))
 const expeditions:Map<string,Expedition> = new Map()
-expeditions.set('tutorial',test.create().addPlayer(players.get('foo')))
+expeditions.set('tutorial',test.create().addPlayer(players.get('bob')))
 
 export const backend = {
   getPlayer(player: string): Player | undefined {
@@ -18,7 +18,8 @@ export const backend = {
   },
 
   listExpeditions(): Array<string> {
-    return Array.from(expeditions.keys())
+    const validExpeditions = Array.from(expeditions).filter(e => !e[1].isComplete)
+    return validExpeditions.map(e => e[0].padEnd(15) + e[1].type.padEnd(15) + e[1].players.size)
   },
 
   createExpedition(exp: Expedition): Expedition {

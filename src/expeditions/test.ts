@@ -17,7 +17,11 @@ function create(): Expedition {
         ctx.expedition.variables.set('foo', Number(arg))
         console.log(ctx.expedition.variables)
         return ''
-      }
+      },
+      complete: (ctx: Context, arg?: string) => {
+        ctx.expedition.variables.set('complete', Boolean(arg))
+        return 'Set complete to ' + Boolean(arg)
+      },
     })
     exp.nodes
       .set('doc2', doc('Welcome',{'name': 'content'}))
