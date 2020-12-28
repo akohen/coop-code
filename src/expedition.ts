@@ -1,5 +1,5 @@
 import { Player } from './player';
-import { Command, Context, ExpeditionModule, Node, Runnable } from './typings';
+import { Command, ExpeditionModule, Node, Runnable } from './typings';
 
 export class Expedition {
   players: {[id: string]: Player};
@@ -7,15 +7,17 @@ export class Expedition {
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
   commands: Map<string, Command>
-  startNode: (ctx: Context) => string
+  startNode: () => string
   id?: string
   type: string
+  endCondition: string;
 
   constructor(
     type: string,
     nodes?: {[idx: string]: Node}, 
     setters?: { [id: string]: Runnable },
-    startNode?: (ctx: Context) => string
+    startNode?: () => string,
+    endCondition?: string,
   ) {
     this.type = type
     this.players = {};
@@ -24,12 +26,18 @@ export class Expedition {
     this.variables = new Map()
     this.startNode = (startNode) ? startNode : () => { return 'start'}
     this.commands = new Map()
+    this.endCondition = endCondition ? endCondition : 'complete'
   }
 
   addPlayer(player: Player): Expedition {
     this.players[player.name] = player
     player.expedition = this
-    player.nodes = ['start']
+    player.nodes = [this.startNode()]
+    return this
+  }
+
+  removePlayer(player: Player): Expedition {
+    delete this.players[player.name]
     return this
   }
 
@@ -80,5 +88,7 @@ export class Expedition {
     return this
   }
 
-  get isComplete():boolean { return false }
+  get isComplete():boolean {
+    return !!this.variables.get(this.endCondition)
+  }
 }
