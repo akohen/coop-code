@@ -8,7 +8,7 @@ const nodes: {[idx: string]: Node} = {
     welcome:() => "Welcome to the HQ",
   },
 };
-const hq = new Expedition('hq', nodes)
+const hq = new Expedition('hq', {nodes})
 
 const cmd: Command = {
   run: (ctx, args) => {
