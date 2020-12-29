@@ -1,7 +1,7 @@
 import { Expedition } from "../expedition";
 import { Player } from "../player";
 
-import { test } from "./test";
+import { tutorial } from "./tutorial";
 import { exp1 } from "./expedition1";
 import { exp as twoPlayers } from "./2players";
 
@@ -12,7 +12,7 @@ export type ExpeditionFactory = {
 }
 
 export const expeditionFactories:Map<string, ExpeditionFactory> = new Map(Object.entries({
-  tutorial: test,
+  tutorial,
   exp1,
   'two-players':twoPlayers,
 }));

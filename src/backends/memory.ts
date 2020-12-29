@@ -1,5 +1,5 @@
 import { Player } from "../player"
-import { test } from "../expeditions/test";
+import { tutorial } from "../expeditions/tutorial";
 import { Expedition } from "../expedition";
 import { Backend } from "../typings";
 
@@ -40,4 +40,4 @@ export const backend:Backend = {
 
 players.set('foo', new Player('foo'))
 players.set('bob', new Player('bob'))
-backend.createExpedition(test.create().addPlayer(players.get('bob')), 'tutorial')
+backend.createExpedition(tutorial.create().addPlayer(players.get('bob')), 'tutorial')

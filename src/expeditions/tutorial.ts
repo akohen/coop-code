@@ -36,4 +36,4 @@ function load(data: string): Expedition {
   return create().load(data)
 }
 
-export const test = {create, load}
+export const tutorial = {create, load}
