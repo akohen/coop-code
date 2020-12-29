@@ -1,5 +1,5 @@
 import { Player } from './player';
-import { Command, ExpeditionModule, Node, Runnable } from './typings';
+import { Command, ExpeditionModule, Node, Runnable, ExpeditionStatus } from './typings';
 
 export class Expedition {
   players: Map<string, Player>;
@@ -90,5 +90,14 @@ export class Expedition {
 
   get isComplete():boolean {
     return !!this.variables.get(this.endCondition)
+  }
+
+  get status(): ExpeditionStatus {
+    if (this.isComplete) return ExpeditionStatus.Completed
+    return ExpeditionStatus.InProgress
+  }
+
+  get inProgress(): boolean {
+    return (this.status == ExpeditionStatus.InProgress)
   }
 }

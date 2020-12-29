@@ -7,7 +7,8 @@ export const expedition:Command = {
     return toList([
       ['Expedition ID', `${ctx.expedition.id} - Other players can join with 'expedition join ${ctx.expedition.id}'`],
       ['Players', Array.from(ctx.expedition.players.values()).map(p => p.name).join(' ')],
-      ['Time Left', '1 hour']
+      ['Time Left', '1 hour'],
+      ['Status', ctx.expedition.status],
     ], {emphasize:true})
   },
   help: () => "Information about the current expedition"

@@ -33,7 +33,7 @@ const cmd: Command = {
       return ctx.player.currentNode.welcome(ctx)
     }
     const expeditions = ctx.backend.listExpeditions()
-    if(!expeditions) return "No expeditions to join, you need to create one with expedition create"
+    if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
     return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.size).toString()]))
   }
   return cmd.help?.(true)

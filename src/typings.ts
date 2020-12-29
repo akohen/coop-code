@@ -36,4 +36,10 @@ export interface Backend {
   update(ctx: Context): void,
 }
 
+export enum ExpeditionStatus {
+  InProgress = "In progress",
+  Failed = "Failed",
+  Completed = "Completed",
+}
+
 export type Context = {player: Player, expedition: Expedition, backend: Backend}

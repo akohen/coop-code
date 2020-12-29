@@ -17,7 +17,7 @@ export const backend:Backend = {
   },
 
   listExpeditions(): Array<Expedition> {
-    const validExpeditions = Array.from(expeditions.values()).filter(e => !e.isComplete)
+    const validExpeditions = Array.from(expeditions.values()).filter(e => e.inProgress)
     return validExpeditions
   },
 

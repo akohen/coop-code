@@ -43,7 +43,7 @@ function execute(ctx: Context, cmdString: string) : appResponse {
     else { errors = 'Invalid command' }
   }
 
-  if(ctx.player.expedition.isComplete) {
+  if(!ctx.player.expedition.inProgress) {
     output = output ? output + '\n' : ''
     output += 'Expedition completed !'
     ctx.player.returnToHQ()
@@ -62,7 +62,7 @@ function execute(ctx: Context, cmdString: string) : appResponse {
 function getState(ctx: Context): unknown {
   return {
     player: ctx.player.currentNode,
-    status: ctx.expedition.isComplete,
+    status: ctx.expedition.status,
   }
 }
 
