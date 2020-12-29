@@ -13,6 +13,7 @@ export interface ExpeditionModule {
   variables?: Map<string, string|number|boolean>
   commands?: Map<string,Command>
 }
+
 export type Runnable = (ctx: Context, args?: string) => string | undefined;
 
 export interface Node {
@@ -29,18 +30,18 @@ export type Command = {
 }
 
 export interface Backend {
-  getPlayer: (player: string) => Player | undefined,
-  createPlayer: (name: string) => Player,
-  getExpedition(name: string): Expedition | undefined,
-  listExpeditions(): Array<Expedition>,
-  createExpedition(exp: Expedition, id?: string): Expedition,
-  update(ctx: Context): void,
+  getPlayer:        (player: string) => Player | undefined,
+  createPlayer:     (name: string) => Player,
+  getExpedition:    (name: string) => Expedition | undefined,
+  listExpeditions:  () => Array<Expedition>,
+  createExpedition: (exp: Expedition, id?: string) => Expedition,
+  update:           (ctx: Context) => void,
 }
 
 export enum ExpeditionStatus {
-  InProgress = "In progress",
-  Failed = "Failed",
-  Completed = "Completed",
+  InProgress  = "In progress",
+  Failed      = "Failed",
+  Completed   = "Completed",
 }
 
 export type Context = {player: Player, expedition: Expedition, backend: Backend}

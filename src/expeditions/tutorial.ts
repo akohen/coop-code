@@ -1,6 +1,7 @@
 import { Expedition } from "../expedition";
 import { Context, Node } from "../typings";
 import { em } from "../utils";
+import { chksum } from "./nodes/checksum-lock";
 import { doc } from "./nodes/doc";
 import { locked } from "./nodes/locked";
 
@@ -37,6 +38,8 @@ function create(): Expedition {
       .set('doc3', doc('Welcome',{'name': 'content'}))
     exp.commands
       .set('expedition-specific',{run:(ctx, args) => (args)})
+    const tutorialLock = chksum('foo',{files:{'name': 'content'}})
+    exp.addModule(tutorialLock)
     exp.addModule(locked('locked2', {welcome:'welcome', prompt: 'prompt>', secret: 'secret', locked:'locked'}))
   return exp
 }
