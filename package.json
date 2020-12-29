@@ -5,24 +5,19 @@
   "engines": {
     "node": "14.x"
   },
-  "main": "server.js",
   "scripts": {
     "test": "jest",
+    "start": "node build/server.js",
     "dev": "nodemon server.ts",
-    "start": "ts-node server.ts",
-    "build": "tsc --project ./"
+    "build": "mkdir -p build && cp -r public build/ && tsc --project ./"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.1.2"
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.9",
-    "@types/node": "^14.14.11",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "eslint": "^7.15.0",
@@ -30,6 +25,10 @@
     "eslint-plugin-import": "^2.22.1",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
-    "ts-jest": "^26.4.4"
+    "ts-jest": "^26.4.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.2",
+    "@types/express": "^4.17.9",
+    "@types/node": "^14.14.11"
   }
 }
