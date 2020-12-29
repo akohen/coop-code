@@ -21,7 +21,7 @@ describe("Expedition", () => {
       listExpeditions: () => (['test']),
       createExpedition: (e:Expedition) => e,
     }
-    ctx = {player: expedition.players['foo'], expedition, backend}
+    ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
   })
 
   describe("Import/export", () => {

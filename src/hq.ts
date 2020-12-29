@@ -1,6 +1,7 @@
 import { Expedition } from "./expedition";
 import { expeditionFactories } from "./expeditions";
 import { Command, Node } from "./typings";
+import { toTable } from "./utils";
 
 const nodes: {[idx: string]: Node} = {
   hq: {
@@ -31,7 +32,9 @@ const cmd: Command = {
       expedition.addPlayer(ctx.player)
       return ctx.player.currentNode.welcome(ctx)
     }
-    return ctx.backend.listExpeditions().join('\n')
+    const expeditions = ctx.backend.listExpeditions()
+    if(!expeditions) return "No expeditions to join, you need to create one with expedition create"
+    return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.size).toString()]))
   }
   return cmd.help?.(true)
 }, help: (long) => long ? 'long help' : 'Create and join expeditions'}

@@ -19,14 +19,14 @@ describe("Commands", () => {
       },
     };
     
-    const expedition = new Expedition('test', nodes).addPlayer(new Player('bob'))
+    const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
     const backend = {
       getPlayer: (player: string) => (new Player(player)),
       getExpedition: () => (expedition),
       listExpeditions: () => (['test']),
       createExpedition: (e:Expedition) => e,
     }
-    ctx = {player: expedition.players['bob'], expedition, backend}
+    ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
   })
 
   describe("echo", () => {

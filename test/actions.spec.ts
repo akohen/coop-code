@@ -21,7 +21,7 @@ describe("Action module", () => {
     listExpeditions: () => (['test']),
     createExpedition: (e:Expedition) => e,
   }
-  const ctx = {player: expedition.players['foo'], expedition, backend}
+  const ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
 
   it("should be able to execute a test", () => {
     expect(true).toBeTruthy()
