@@ -7,7 +7,7 @@ export class Expedition {
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
   commands: Map<string, Command>
-  startNode: () => string
+  startNode: (player: Player) => string
   id?: string
   type: string
   endCondition: string;
@@ -17,7 +17,7 @@ export class Expedition {
     {nodes, setters, startNode, endCondition} : {
       nodes?: {[idx: string]: Node}, 
       setters?: { [id: string]: Runnable },
-      startNode?: () => string,
+      startNode?: (player: Player) => string,
       endCondition?: string
     } = {}
   ) {
@@ -34,7 +34,7 @@ export class Expedition {
   addPlayer(player: Player): Expedition {
     this.players.set(player.name, player)
     player.expedition = this
-    player.nodes = [this.startNode()]
+    player.nodes = [this.startNode(player)]
     return this
   }
 
