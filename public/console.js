@@ -27,7 +27,7 @@ var game = {
   },
   options: {
     prompt: function(e) {game.setPrompt(e)},
-    greetings: function(callback) {callback("Welcome to Jovian Week ")},
+    greetings: function(callback) {callback("Welcome")},
     onBlur: function() { return false },
     exit: false,
   },
