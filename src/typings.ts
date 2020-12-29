@@ -30,6 +30,7 @@ export type Command = {
 
 export interface Backend {
   getPlayer: (player: string) => Player | undefined,
+  createPlayer: (name: string) => Player,
   getExpedition(name: string): Expedition | undefined,
   listExpeditions(): Array<Expedition>,
   createExpedition(exp: Expedition, id?: string): Expedition,

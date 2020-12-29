@@ -12,6 +12,12 @@ export const backend:Backend = {
     return players.get(player)
   },
 
+  createPlayer(name: string): Player {
+    const player = new Player(name)
+    players.set(name, player)
+    return player
+  },
+
   getExpedition(name: string): Expedition | undefined {
     return expeditions.get(name)
   },

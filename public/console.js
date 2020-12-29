@@ -1,8 +1,11 @@
 var game = {
   interpreter: function(command, term) {
     const cmd = $.terminal.parse_command(command)
-    if(cmd.name == 'login') {
-      game.player = cmd.rest
+    if(game.player == undefined) {
+      game.player = cmd.name
+      command = ''
+    } else if(cmd.name == 'login') {
+      game.player = cmd.args[0]
       command = ''
     }
     return $.post('/', {cmd: command, player: game.player}).then(e => {
@@ -29,7 +32,7 @@ var game = {
     exit: false,
   },
   setPrompt: function(e) {
-    e('[[;green;]foo]@[[;#ddd;]HQ]>')
+    e('login>')
   },
 }
 
