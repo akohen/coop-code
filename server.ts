@@ -4,7 +4,7 @@ import game from './src/game';
 import { backend } from './src/backends/memory';
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
