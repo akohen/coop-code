@@ -24,7 +24,7 @@ function create(): Expedition {
       .set('doc3', doc('Welcome',{'name': 'content'}))
     exp.commands
       .set('expedition-specific',{run:(ctx, args) => (args)})
-    exp.addModule(locked('locked2', 'welcome', 'prompt>', 'secret','locked'))
+    exp.addModule(locked('locked2', {welcome:'welcome', prompt:'prompt>', secret:'secret',locked:'locked'}))
   return exp
 }
 

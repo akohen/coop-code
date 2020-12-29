@@ -1,4 +1,4 @@
-import { ExpeditionModule } from "../../typings";
+import { ExpeditionModule, Node } from "../../typings";
 
 /**
   * A node requiring a password on the first connection
@@ -12,19 +12,22 @@ import { ExpeditionModule } from "../../typings";
   */
 const locked = (
   name: string,
-  welcome: string,
-  prompt: string,
-  secret: string,
-  locked: string,
-  unlock?: string,
-  fail?: string
+  { welcome, prompt, secret, locked, unlock, fail } : {
+    welcome: string,
+    prompt: string,
+    secret: string,
+    locked: string,
+    unlock?: string,
+    fail?: string
+  },
+  node?: Node
 ): ExpeditionModule => ({
-  nodes: [[name, {
+  nodes: [[name, {...node,
     welcome: (ctx) => {
       if(ctx.expedition.variables.get(name+'-unlock')) return welcome
       ctx.player.input = name+'-unlock'
       throw new Error(locked)
-    }
+    },
   }]],
   commands: new Map([[name+'-unlock',{
     run:(ctx, args) => {
