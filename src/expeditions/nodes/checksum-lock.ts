@@ -13,7 +13,7 @@ const chksum = (name: string, node?:Node):ExpeditionModule => ({
     name,
     unlock:'unlock',
     locked:'locked',
-    secret:'secret',
+    secret: Array.from(name).reduce((a,c) => a+c.charCodeAt(0),0).toString(),
     prompt:'>'
   })]])
 })
