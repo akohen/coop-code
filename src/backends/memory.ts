@@ -1,12 +1,13 @@
 import { Player } from "../player"
 import { test } from "../expeditions/test";
 import { Expedition } from "../expedition";
+import { Backend, Context } from "../typings";
 
 
 const expeditions:Map<string,Expedition> = new Map()
 const players = new Map()
 
-export const backend = {
+export const backend:Backend = {
   getPlayer(player: string): Player | undefined {
     return players.get(player)
   },
@@ -26,6 +27,9 @@ export const backend = {
     exp.id = expID
     return exp
   },
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  update(): void {}
 }
 
 players.set('foo', new Player('foo'))

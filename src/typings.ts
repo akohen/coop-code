@@ -32,7 +32,8 @@ export interface Backend {
   getPlayer: (player: string) => Player | undefined,
   getExpedition(name: string): Expedition | undefined,
   listExpeditions(): Array<Expedition>,
-  createExpedition(exp: Expedition): Expedition,
+  createExpedition(exp: Expedition, id?: string): Expedition,
+  update(ctx: Context): void,
 }
 
 export type Context = {player: Player, expedition: Expedition, backend: Backend}

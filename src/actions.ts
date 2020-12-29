@@ -48,6 +48,8 @@ function execute(ctx: Context, cmdString: string) : appResponse {
     output += 'Expedition completed !'
     ctx.player.returnToHQ()
   }
+  
+  ctx.backend.update(ctx)
 
   return {
     errors,
