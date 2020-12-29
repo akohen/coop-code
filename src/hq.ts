@@ -4,7 +4,7 @@ import { Command, Node } from "./typings";
 import { toTable } from "./utils";
 
 const nodes: {[idx: string]: Node} = {
-  hq: {
+  HQ: {
     welcome:() => "Welcome to the HQ",
   },
 };

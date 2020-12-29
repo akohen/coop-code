@@ -1,7 +1,7 @@
 import { Player } from "../player"
 import { test } from "../expeditions/test";
 import { Expedition } from "../expedition";
-import { Backend, Context } from "../typings";
+import { Backend } from "../typings";
 
 
 const expeditions:Map<string,Expedition> = new Map()

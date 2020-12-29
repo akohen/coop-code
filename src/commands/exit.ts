@@ -6,7 +6,7 @@ export const exit:Command = {
       ctx.player.nodes.pop()
       return ctx.player.currentNode.welcome(ctx)
     }
-    if(ctx.player.currentNodeName != 'hq') {
+    if(ctx.expedition.type != 'hq') {
       if(args != '-y') throw new Error(`This will leave the expedition. Use exit -y to leave`)
       ctx.player.returnToHQ()
       return ctx.player.currentNode.welcome(ctx)
