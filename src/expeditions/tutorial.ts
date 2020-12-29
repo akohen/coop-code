@@ -16,6 +16,7 @@ next:`Let's go to another system using the ${em('connect')} command.
 The system we want to connect to is called 'doc'.
 If you need additional information, you can use ${em('help connect')} to display this command help page.`},
   },
+  nohello: {}
 };
 
 function create(): Expedition {

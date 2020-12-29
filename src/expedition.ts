@@ -71,7 +71,7 @@ export class Expedition {
       nodeName, 
       {
         ...node,
-        welcome: node.welcome.toString(),
+        welcome: node.welcome?.toString(),
         isAvailable: node.isAvailable ? node.isAvailable.toString() : undefined,
       }
     ]))
@@ -83,7 +83,7 @@ export class Expedition {
     const imported:[string,Node][] = JSON.parse(nodes)
     
     const importedNodes: [string, Node][] = imported.map(([key, value]) => {
-      const node = {...value, welcome: new Function("return "+ value.welcome.toString())()} as Node
+      const node = {...value, welcome: new Function("return "+ value.welcome?.toString())()} as Node
       return [ key, node ]
     })
     this.nodes = new Map(importedNodes)

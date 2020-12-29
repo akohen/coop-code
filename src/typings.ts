@@ -16,7 +16,7 @@ export interface ExpeditionModule {
 export type Runnable = (ctx: Context, args?: string) => string | undefined;
 
 export interface Node {
-  welcome: (ctx:Context) => string,
+  welcome?: Runnable,
   tags?: Array<string>,
   files?: {[name: string]: string},
   isAvailable?: (ctx:Context) => boolean,

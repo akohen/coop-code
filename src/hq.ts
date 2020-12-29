@@ -22,7 +22,7 @@ const cmd: Command = {
         if(!factory) throw new Error(`Unable to create expedition ${argv[1]}`)
         const expedition = ctx.backend.createExpedition(factory.create())
         expedition.addPlayer(ctx.player)
-        return ctx.player.currentNode.welcome(ctx)
+        return ctx.player.currentNode.welcome?.(ctx)
       }
       return Array.from(expeditionFactories.keys()).join('\n')
     } else if (argv[0] == 'join') {
@@ -30,7 +30,7 @@ const cmd: Command = {
         const expedition = ctx.backend.getExpedition(argv[1])
         if(!expedition) throw new Error(`Expedition ${argv[1]} not found`)
         expedition.addPlayer(ctx.player)
-        return ctx.player.currentNode.welcome(ctx)
+        return ctx.player.currentNode.welcome?.(ctx)
       }
       const expeditions = ctx.backend.listExpeditions()
       if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
