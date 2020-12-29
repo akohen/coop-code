@@ -2,6 +2,7 @@ import { execute } from "../src/actions";
 import { Expedition } from "../src/expedition";
 import { Player } from "../src/player";
 import { Context, Node } from "../src/typings";
+import { backend } from "../src/backends/memory";
 
 describe("Commands", () => {
   let ctx: Context
@@ -20,12 +21,6 @@ describe("Commands", () => {
     };
     
     const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
-    const backend = {
-      getPlayer: (player: string) => (new Player(player)),
-      getExpedition: () => (expedition),
-      listExpeditions: () => (['test']),
-      createExpedition: (e:Expedition) => e,
-    }
     ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
   })
 

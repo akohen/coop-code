@@ -2,6 +2,8 @@ import { execute, getAvailable } from "../src/actions";
 import { Expedition } from "../src/expedition";
 import { Player } from "../src/player";
 import { Node } from "../src/typings";
+import { mocked } from 'ts-jest/utils';
+import { backend } from "../src/backends/memory";
 
 
 
@@ -15,13 +17,8 @@ describe("Action module", () => {
   };
   
   const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
-  const backend = {
-    getPlayer: (player: string) => (new Player(player)),
-    getExpedition: () => (expedition),
-    listExpeditions: () => (['test']),
-    createExpedition: (e:Expedition) => e,
-  }
-  const ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
+  const mockedBackend = mocked(backend, true)
+  const ctx = {player: expedition.players.get('foo') as Player, expedition, backend: mockedBackend}
 
   it("should be able to execute a test", () => {
     expect(true).toBeTruthy()
