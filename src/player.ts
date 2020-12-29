@@ -14,7 +14,7 @@ export class Player {
     }
   
     returnToHQ(): void {
-      if(this.expedition) this.expedition.removePlayer(this)
+      if(this.expedition && !this.expedition.isComplete) this.expedition.removePlayer(this)
       this.expedition = hq
       this.nodes = ['HQ']
     }
