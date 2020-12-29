@@ -20,7 +20,7 @@ describe("Commands", () => {
       },
     };
     
-    const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
+    const expedition = new Expedition('test', {nodes}).addPlayer(new Player('foo'))
     ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
   })
 

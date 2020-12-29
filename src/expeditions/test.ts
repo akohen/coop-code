@@ -12,7 +12,7 @@ const nodes: {[idx: string]: Node} = {
 
 function create(): Expedition {
   const exp = new Expedition('tutorial',
-    nodes,{
+    {nodes,setters: {
       foo: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('foo', Number(arg))
         console.log(ctx.expedition.variables)
@@ -22,7 +22,7 @@ function create(): Expedition {
         ctx.expedition.variables.set('complete', Boolean(arg))
         return 'Set complete to ' + Boolean(arg)
       },
-    })
+    }})
     exp.nodes
       .set('doc2', doc('Welcome',{'name': 'content'}))
       .set('doc3', doc('Welcome',{'name': 'content'}))

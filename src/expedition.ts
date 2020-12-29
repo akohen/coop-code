@@ -14,10 +14,12 @@ export class Expedition {
 
   constructor(
     type: string,
-    nodes?: {[idx: string]: Node}, 
-    setters?: { [id: string]: Runnable },
-    startNode?: () => string,
-    endCondition?: string,
+    {nodes, setters, startNode, endCondition} : {
+      nodes?: {[idx: string]: Node}, 
+      setters?: { [id: string]: Runnable },
+      startNode?: () => string,
+      endCondition?: string
+    } = {}
   ) {
     this.type = type
     this.players = new Map();

@@ -16,7 +16,7 @@ describe("Action module", () => {
     },
   };
   
-  const expedition = new Expedition('test', nodes).addPlayer(new Player('foo'))
+  const expedition = new Expedition('test', {nodes}).addPlayer(new Player('foo'))
   const mockedBackend = mocked(backend, true)
   const ctx = {player: expedition.players.get('foo') as Player, expedition, backend: mockedBackend}
 

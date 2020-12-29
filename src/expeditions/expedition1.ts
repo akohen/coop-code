@@ -11,14 +11,14 @@ const nodes: {[idx: string]: Node} = {
 };
 
 function create(): Expedition {
-  const exp = new Expedition('exp1',
-    nodes,{
+  const exp = new Expedition('exp1',{
+    nodes, setters: {
       foo: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('foo', Number(arg))
         console.log(ctx.expedition.variables)
         return ''
       }
-    })
+    }})
     exp.nodes
       .set('doc2', doc('Welcome',{'name': 'content'}))
       .set('doc3', doc('Welcome',{'name': 'content'}))
