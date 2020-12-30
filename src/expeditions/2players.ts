@@ -41,4 +41,4 @@ function load(data: string): Expedition {
   return create().load(data)
 }
 
-export const exp = {create, load}
+export const exp = {create, load, players:2}

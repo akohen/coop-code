@@ -66,4 +66,4 @@ function load(data: string): Expedition {
   return create().load(data)
 }
 
-export const tutorial = {create, load}
+export const tutorial = {create, load, players:1, difficulty:'trivial'}

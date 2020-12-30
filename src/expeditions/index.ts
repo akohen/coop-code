@@ -9,6 +9,8 @@ export type ExpeditionFactory = {
   create: () => Expedition,
   load: (data: string) => Expedition,
   isAvailable?: (player: Player) => boolean,
+  players?: number,
+  difficulty?: string,
 }
 
 export const expeditionFactories:Map<string, ExpeditionFactory> = new Map(Object.entries({

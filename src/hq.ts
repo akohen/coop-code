@@ -16,6 +16,7 @@ const cmd: Command = {
       return cmd.help?.(true)
     }
     const argv = args.split(' ').filter(e => e)
+
     if (argv[0] == 'create') {
       if(argv[1]) {
         const factory = expeditionFactories.get(argv[1])
@@ -24,7 +25,11 @@ const cmd: Command = {
         expedition.addPlayer(ctx.player)
         return ctx.player.currentNode.welcome?.(ctx)
       }
-      return Array.from(expeditionFactories.keys()).join('\n')
+      return toTable(
+        ['type', 'difficulty', 'players'],
+        Array.from(expeditionFactories.entries()).map(([t,e]) => ([t,e.difficulty, e.players?.toString()]))
+      )
+
     } else if (argv[0] == 'join') {
       if(argv[1]) {
         const expedition = ctx.backend.getExpedition(argv[1])
@@ -36,8 +41,9 @@ const cmd: Command = {
       if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
       return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.size).toString()]))
     }
+
     return cmd.help?.(true)
-  }, 
+  },
   help: (long) => long ? 'expedition command usage:\n' + toList([
     ['expedition create','List expeditions available for creation'],
     ['expedition create [type]','Create a new expedition of the selected type'],
