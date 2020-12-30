@@ -4,6 +4,7 @@ import { em } from "../utils";
 import { chksum } from "./nodes/checksum-lock";
 import { doc } from "./nodes/doc";
 import { locked } from "./nodes/locked";
+import { useless } from "./data/files"
 
 const nodes: {[idx: string]: Node} = {
   start: {
@@ -24,7 +25,10 @@ This will show all the systems you are currently connected to, and which ones ca
   'hub-ff08': {
     welcome: () => `Some systems are only accessible from some specific systems. Only currently accessible systems are shown on scans`,
     tags: ['hub'],
-    files: {'about-locks': `Some information about locks here`}
+    files: {...useless[0],...useless[1], 'about-locks': `Some information about locks here`}
+  },
+  empty: {
+    files:{}
   },
 };
 
