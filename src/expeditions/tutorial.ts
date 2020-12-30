@@ -14,10 +14,18 @@ The command you've just used is ${em('read')} and allows you to open files by gi
 It this case, you've opened the 'how-to' file.
 To continue, you'll need to use the ${em('ls')} command to list the files on this system, then the ${em('read')} command to open it.`,
 next:`Let's go to another system using the ${em('connect')} command.
-The system we want to connect to is called 'doc'.
+The system we want to connect to is called 'terminal-a6b1'.
 If you need additional information, you can use ${em('help connect')} to display this command help page.`},
   },
-  nohello: {}
+  'terminal-a6b1': {
+    welcome: () => `Let's see were you can go now, using the ${em('scan')} command.
+This will show all the systems you are currently connected to, and which ones can be reached from your current loction`,
+  },
+  'hub-ff08': {
+    welcome: () => `Some systems are only accessible from some specific systems. Only currently accessible systems are shown on scans`,
+    tags: ['hub'],
+    files: {'about-locks': `Some information about locks here`}
+  },
 };
 
 function create(): Expedition {
@@ -34,12 +42,12 @@ function create(): Expedition {
       },
     }})
     exp.nodes
-      .set('doc', doc('Welcome',{'name': 'content'}))
       .set('doc3', doc('Welcome',{'name': 'content'}))
     exp.commands
       .set('expedition-specific',{run:(ctx, args) => (args)})
-    const tutorialLock = chksum('foo', 'Welcome text', {files:{'name': 'content'}})
-    exp.addModule(tutorialLock)
+    exp.addModule(
+      chksum('first-lock', 'Welcome text', {isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('hub')||false)})
+    )
     exp.addModule(locked('locked2', {welcome:'welcome', prompt: 'prompt>', secret: 'secret', locked:'locked'}))
   return exp
 }

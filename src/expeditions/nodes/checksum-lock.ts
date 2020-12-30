@@ -1,6 +1,8 @@
 import { ExpeditionModule, Node } from "../../typings"
 import { lockWelcome, lockCmd } from "../functions/generic-lock";
 
+const chksumSolve = (name: string): string => (Array.from(name).reduce((a,c) => a+c.charCodeAt(0),0).toString())
+
 const chksum = (name: string, welcome: string, node?:Node):ExpeditionModule => ({
   nodes:[[name,{...node,
     welcome: lockWelcome({
@@ -13,9 +15,10 @@ const chksum = (name: string, welcome: string, node?:Node):ExpeditionModule => (
     name,
     unlock: `Checksum correct\n${welcome}`,
     locked:'Incorrect checksum',
-    secret: Array.from(name).reduce((a,c) => a+c.charCodeAt(0),0).toString(),
+    secret: chksumSolve(name),
     prompt:'Enter checksum >'
   })]])
 })
 
-export { chksum }
+
+export { chksum, chksumSolve }
