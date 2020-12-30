@@ -35,24 +35,14 @@ This will show all the systems you are currently connected to, and which ones ca
 function create(): Expedition {
   const exp = new Expedition('tutorial',
     {nodes,setters: {
-      foo: (ctx: Context, arg?: string) => {
-        ctx.expedition.variables.set('foo', Number(arg))
-        console.log(ctx.expedition.variables)
-        return ''
-      },
       complete: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('complete', Boolean(arg))
         return 'Set complete to ' + Boolean(arg)
       },
     }})
-    exp.nodes
-      .set('doc3', doc('Welcome',{'name': 'content'}))
-    exp.commands
-      .set('expedition-specific',{run:(ctx, args) => (args)})
     exp.addModule(
       chksum('first-lock', 'Welcome text', {isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('hub')||false)})
     )
-    exp.addModule(locked('locked2', {welcome:'welcome', prompt: 'prompt>', secret: 'secret', locked:'locked'}))
   return exp
 }
 
