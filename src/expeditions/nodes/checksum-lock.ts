@@ -1,20 +1,20 @@
 import { ExpeditionModule, Node } from "../../typings"
 import { lockWelcome, lockCmd } from "../functions/generic-lock";
 
-const chksum = (name: string, node?:Node):ExpeditionModule => ({
+const chksum = (name: string, welcome: string, node?:Node):ExpeditionModule => ({
   nodes:[[name,{...node,
     welcome: lockWelcome({
       name,
-      welcome:'welcome',
-      locked:'locked'
+      welcome,
+      locked:`Please verify your request by validating this node's ASCII checksum`
     }),
   }]],
   commands: new Map([['_unlock-'+name, lockCmd({
     name,
-    unlock:'unlock',
-    locked:'locked',
+    unlock: `Checksum correct\n${welcome}`,
+    locked:'Incorrect checksum',
     secret: Array.from(name).reduce((a,c) => a+c.charCodeAt(0),0).toString(),
-    prompt:'>'
+    prompt:'Enter checksum >'
   })]])
 })
 

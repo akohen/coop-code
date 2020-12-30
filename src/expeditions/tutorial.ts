@@ -38,7 +38,7 @@ function create(): Expedition {
       .set('doc3', doc('Welcome',{'name': 'content'}))
     exp.commands
       .set('expedition-specific',{run:(ctx, args) => (args)})
-    const tutorialLock = chksum('foo',{files:{'name': 'content'}})
+    const tutorialLock = chksum('foo', 'Welcome text', {files:{'name': 'content'}})
     exp.addModule(tutorialLock)
     exp.addModule(locked('locked2', {welcome:'welcome', prompt: 'prompt>', secret: 'secret', locked:'locked'}))
   return exp
