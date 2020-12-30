@@ -1,10 +1,13 @@
 import { Expedition } from "../expedition";
 import { Context, Node } from "../typings";
 import { em } from "../utils";
-import { chksum } from "./nodes/checksum-lock";
-import { doc } from "./nodes/doc";
-import { locked } from "./nodes/locked";
 import { useless } from "./data/files"
+import { lockCmd, lockWelcome } from "./functions/generic-lock";
+
+const lockedNodeWelcome = `Well done!
+In some expeditions and/or systems, you can also set some variables using the command ${em('set')}.
+To finish this expedition, you need to set the 'completed' variable to 'true' (other expeditions won't be this easy to complete!)
+You can also keep exploring and trying commands.`
 
 const nodes: {[idx: string]: Node} = {
   start: {
@@ -25,24 +28,37 @@ This will show all the systems you are currently connected to, and which ones ca
   'hub-ff08': {
     welcome: () => `Some systems are only accessible from some specific systems. Only currently accessible systems are shown on scans`,
     tags: ['hub'],
-    files: {...useless[0],...useless[1], 'about-locks': `Some information about locks here`}
+    files: {
+      ...useless[0], 
+      'about-locks': `Some systems are locked, and require a password for access.\nSometimes this password can be found or guessed, sometimes you will need to do some calculations to find it.`, 
+      'passwd': `admin:swordfish:1001:1016:System Administrator:/home   # Remember to activate password hashing !`},
   },
-  empty: {
-    files:{}
+  'first-lock': {
+    welcome: lockWelcome({
+      name: 'first-lock',
+      welcome: lockedNodeWelcome,
+      locked:`This system is password-protected, please enter the admin password`,
+    }),
+    isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('hub')||false),
   },
 };
+
 
 function create(): Expedition {
   const exp = new Expedition('tutorial',
     {nodes,setters: {
-      complete: (ctx: Context, arg?: string) => {
-        ctx.expedition.variables.set('complete', Boolean(arg))
-        return 'Set complete to ' + Boolean(arg)
+      completed: (ctx: Context, arg?: string) => {
+        ctx.expedition.variables.set('complete', (arg === 'true'))
+        return `Set completed to ${em((arg === 'true').toString())}`
       },
     }})
-    exp.addModule(
-      chksum('first-lock', 'Welcome text', {isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('hub')||false)})
-    )
+    exp.commands.set('_unlock-first-lock',lockCmd({
+      name:'first-lock',
+      unlock: `Password correct\n${lockedNodeWelcome}`,
+      locked:'Incorrect password',
+      secret: 'swordfish',
+      prompt:'Password>'
+    }))
   return exp
 }
 
