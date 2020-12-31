@@ -14,7 +14,7 @@ export function em(str: string): string { return `[[;white;]${str}]`}
 
 export function timeFormat(duration: number): string {
   const [minutes, seconds] = [Math.floor(duration / 60), duration % 60]
-  return (minutes > 0 ? minutes.toString().padStart(2,'0')+'m' : '') + (seconds > 0 ? seconds.toString().padStart(2,'0')+'s' : '')
+  return (minutes > 0 ? minutes.toString().padStart(2,'0')+'m' : '') + seconds.toString().padStart(2,'0')+'s'
 }
 
 export function timeLeft(date: Date): string {

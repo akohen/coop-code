@@ -99,10 +99,15 @@ export class Expedition {
 
   get status(): ExpeditionStatus {
     if (this.isComplete) return ExpeditionStatus.Completed
+    if (this.secondsLeft && this.secondsLeft < 0) return ExpeditionStatus.Failed
     return ExpeditionStatus.InProgress
   }
 
   get inProgress(): boolean {
     return (this.status == ExpeditionStatus.InProgress)
+  }
+
+  get secondsLeft(): number | undefined {
+    return this.endDate ? Math.floor((this.endDate.getTime() - new Date().getTime())/1000) : undefined 
   }
 }

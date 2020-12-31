@@ -25,6 +25,14 @@ function available (ctx: Context): Map<string,Command> {
 }
 
 function execute(ctx: Context, cmdString: string) : appResponse {
+  if(!ctx.player.expedition.inProgress) {
+    ctx.player.returnToHQ()
+    return {
+      output: 'Expedition completed !',
+      prompt: ctx.player.prompt,
+      expedition: {state:getState(ctx), path: ctx.player.nodes}
+    }
+  }
   let output, errors
   if (ctx.player.input != undefined) {
     try {
