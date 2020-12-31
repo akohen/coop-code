@@ -45,13 +45,19 @@ This will show all the systems you are currently connected to, and which ones ca
 
 
 function create(): Expedition {
+  const endDate = new Date()
+  endDate.setMinutes(endDate.getMinutes() + 60)
   const exp = new Expedition('tutorial',
-    {nodes,setters: {
-      completed: (ctx: Context, arg?: string) => {
-        ctx.expedition.variables.set('complete', (arg === 'true'))
-        return `Set completed to ${em((arg === 'true').toString())}`
+    {
+      nodes,
+      setters: {
+        completed: (ctx: Context, arg?: string) => {
+          ctx.expedition.variables.set('complete', (arg === 'true'))
+          return `Set completed to ${em((arg === 'true').toString())}`
+        },
       },
-    }})
+      endDate,
+  })
     exp.commands.set('_unlock-first-lock',lockCmd({
       name:'first-lock',
       unlock: `Password correct\n${lockedNodeWelcome}`,

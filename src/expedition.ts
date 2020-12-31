@@ -11,14 +11,16 @@ export class Expedition {
   id?: string
   type: string
   endCondition: string;
+  endDate?: Date
 
   constructor(
     type: string,
-    {nodes, setters, startNode, endCondition} : {
+    {nodes, setters, startNode, endCondition, endDate} : {
       nodes?: {[idx: string]: Node}, 
       setters?: { [id: string]: Runnable },
       startNode?: (player: Player) => string,
-      endCondition?: string
+      endCondition?: string,
+      endDate?: Date
     } = {}
   ) {
     this.type = type
@@ -29,6 +31,7 @@ export class Expedition {
     this.startNode = (startNode) ? startNode : () => { return 'start'}
     this.commands = new Map()
     this.endCondition = endCondition ? endCondition : 'complete'
+    this.endDate = endDate
   }
 
   addPlayer(player: Player): Expedition {
