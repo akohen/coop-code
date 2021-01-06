@@ -1,12 +1,12 @@
 import { Player } from './player';
-import { Command, ExpeditionModule, Node, Runnable, ExpeditionStatus } from './typings';
+import { Command, ExpeditionModule, Node, Runnable, ExpeditionStatus, AsyncCommand } from './typings';
 
 export class Expedition {
   players: Map<string, Player>;
   nodes: Map<string, Node>;
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
-  commands: Map<string, Command>
+  commands: Map<string, Command|AsyncCommand>
   startNode: (player: Player) => string
   id?: string
   type: string

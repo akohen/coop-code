@@ -15,6 +15,7 @@ export interface ExpeditionModule {
 }
 
 export type Runnable = (ctx: Context, args?: string) => string | undefined;
+export type AsyncRunnable = (ctx: Context, args?: string) => Promise<string | undefined>;
 
 export interface Node {
   welcome?: Runnable,
@@ -28,14 +29,19 @@ export type Command = {
   help?: (isLongHelp?: boolean) => string,
   isAvailable?: (ctx: Context) => boolean,
 }
+export type AsyncCommand = {
+  run: AsyncRunnable,
+  help?: (isLongHelp?: boolean) => string,
+  isAvailable?: (ctx: Context) => boolean,
+}
 
 export interface Backend {
-  getPlayer:        (player: string) => Player | undefined,
-  createPlayer:     (name: string) => Player,
-  getExpedition:    (name: string) => Expedition | undefined,
-  listExpeditions:  () => Array<Expedition>,
-  createExpedition: (exp: Expedition, id?: string) => Expedition,
-  update:           (ctx: Context) => void,
+  getPlayer:        (player: string) => Promise<Player | undefined>,
+  createPlayer:     (name: string) => Promise<Player>,
+  getExpedition:    (name: string) => Promise<Expedition | undefined>,
+  listExpeditions:  () => Promise<Array<Expedition>>,
+  createExpedition: (exp: Expedition, id?: string) => Promise<Expedition>,
+  update:           (ctx: Context) => Promise<void>,
 }
 
 export enum ExpeditionStatus {

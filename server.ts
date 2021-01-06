@@ -16,9 +16,9 @@ app.get('/', function (req, res) {
 });
 
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
   try {
-    const result = game(req.body['player'], req.body['cmd'], backend)
+    const result = await game(req.body['player'], req.body['cmd'], backend)
     res.status((result.errors) ? 400 : 200).json(result)
   } catch (error) {
     res.status(500).json(error.message)

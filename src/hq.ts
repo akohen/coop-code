@@ -1,6 +1,6 @@
 import { Expedition } from "./expedition";
 import { expeditionFactories } from "./expeditions";
-import { Command, Node } from "./typings";
+import { AsyncCommand, Node } from "./typings";
 import { toList, toTable } from "./utils";
 
 const nodes: {[idx: string]: Node} = {
@@ -10,8 +10,8 @@ const nodes: {[idx: string]: Node} = {
 };
 const hq = new Expedition('hq', {nodes})
 
-const cmd: Command = {
-  run: (ctx, args) => {
+const cmd: AsyncCommand = {
+  run: async (ctx, args) => {
     if (args == undefined) {
       return cmd.help?.(true)
     }
@@ -21,7 +21,7 @@ const cmd: Command = {
       if(argv[1]) {
         const factory = expeditionFactories.get(argv[1])
         if(!factory) throw new Error(`Unable to create expedition ${argv[1]}`)
-        const expedition = ctx.backend.createExpedition(factory.create())
+        const expedition = await ctx.backend.createExpedition(factory.create())
         expedition.addPlayer(ctx.player)
         return ctx.player.currentNode.welcome?.(ctx)
       }
@@ -32,12 +32,12 @@ const cmd: Command = {
 
     } else if (argv[0] == 'join') {
       if(argv[1]) {
-        const expedition = ctx.backend.getExpedition(argv[1])
+        const expedition = await ctx.backend.getExpedition(argv[1])
         if(!expedition) throw new Error(`Expedition ${argv[1]} not found`)
         expedition.addPlayer(ctx.player)
         return ctx.player.currentNode.welcome?.(ctx)
       }
-      const expeditions = ctx.backend.listExpeditions()
+      const expeditions = await ctx.backend.listExpeditions()
       if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
       return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.size).toString()]))
     }
