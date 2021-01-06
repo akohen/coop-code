@@ -25,40 +25,40 @@ describe("Commands", () => {
   })
 
   describe("echo", () => {
-    it("should echo the argument", () => {
-      expect(execute(ctx, "echo hello world!").output).toBe("hello world!")
+    it("should echo the argument", async () => {
+      expect((await execute(ctx, "echo hello world!")).output).toBe("hello world!")
     })
   })
 
   describe("connect", () => {
-    it("should fail if called without arguments", () => {
-      expect(execute(ctx, "connect").errors).toBeDefined()
+    it("should fail if called without arguments", async () => {
+      expect((await execute(ctx, "connect")).errors).toBeDefined()
     })
-    it("should fail if called without too many arguments", () => {
-      expect(execute(ctx, "connect node2 extra").errors).toBeDefined()
+    it("should fail if called without too many arguments", async () => {
+      expect((await execute(ctx, "connect node2 extra")).errors).toBeDefined()
     })
-    it("should fail if called on an unknown node", () => {
-      expect(execute(ctx, "connect foo").errors).toBeDefined()
+    it("should fail if called on an unknown node", async () => {
+      expect((await execute(ctx, "connect foo")).errors).toBeDefined()
     })
     it("should connect to a valid node", () => {
       execute(ctx, "connect node2")
       expect(ctx.player.currentNodeName).toBe("node2")
     })
-    it("should show the node connection message", () => {
-      expect(execute(ctx, "connect node2").output).toBe("node2 hello")
+    it("should show the node connection message", async () => {
+      expect((await execute(ctx, "connect node2")).output).toBe("node2 hello")
     })
-    it("should return to a previously visited node", () => {
+    it("should return to a previously visited node", async () => {
       execute(ctx, "connect node2")
       execute(ctx, "connect node3")
-      expect(execute(ctx, "connect node2").output).toBe("node2 hello")
+      expect((await execute(ctx, "connect node2")).output).toBe("node2 hello")
       expect(ctx.player.nodes).toStrictEqual(['start', 'node2'])
     })
-    it("should not be able to connect to an unavailable node", () => {
-      expect(execute(ctx, "connect node4").errors).toBeDefined()
+    it("should not be able to connect to an unavailable node", async () => {
+      expect((await execute(ctx, "connect node4")).errors).toBeDefined()
     })
-    it("should be able to connect to an available node", () => {
+    it("should be able to connect to an available node", async () => {
       execute(ctx, "connect node3")
-      expect(execute(ctx, "connect node4").output).toBe('available from node3 only')
+      expect((await execute(ctx, "connect node4")).output).toBe('available from node3 only')
     })
   })
 
@@ -72,12 +72,12 @@ describe("Commands", () => {
       execute(ctx, "exit")
       expect(ctx.player.currentNodeName).toBe("start")
     })
-    it("should show an error if trying to exit the first node", () => {
-      expect(execute(ctx, "exit").errors).toBeDefined()
+    it("should show an error if trying to exit the first node", async () => {
+      expect((await execute(ctx, "exit")).errors).toBeDefined()
     })
-    it("should show the new node connection message", () => {
+    it("should show the new node connection message", async () => {
       execute(ctx, "connect node2")
-      expect(execute(ctx, "exit").output).toBe("Welcome")
+      expect((await execute(ctx, "exit")).output).toBe("Welcome")
     })
   })
 })

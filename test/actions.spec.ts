@@ -26,13 +26,13 @@ describe("Action module", () => {
   it("should respond to commands", () => {
     expect(execute(ctx, "hello")).toBeDefined()
   })
-  it("should return without output or error to an empty string", () => {
-    const result = execute(ctx, "")
+  it("should return without output or error to an empty string", async () => {
+    const result = await execute(ctx, "")
     expect(result.output).toBeUndefined()
     expect(result.errors).toBeUndefined()
   })
-  it("should read a file", () => {
-    const result = execute(ctx, "read foo")
+  it("should read a file", async () => {
+    const result = await execute(ctx, "read foo")
     expect(result.output).toBe("bar")
     expect(result.errors).toBeUndefined()
   })
@@ -40,8 +40,8 @@ describe("Action module", () => {
     ctx.expedition.commands.set('expedition-specific-command',{run:(ctx, args) => (args)})
     expect(getAvailable(ctx, "expedition-specific-command")).toBeDefined()
   })
-  it("should overwrite common commands", () => {
+  it("should overwrite common commands", async () => {
     ctx.expedition.commands.set('echo',{run:() => ('overwritten')})
-    expect(execute(ctx, "echo").output).toBe('overwritten')
+    expect((await execute(ctx, "echo")).output).toBe('overwritten')
   })
 })
