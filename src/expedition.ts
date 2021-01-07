@@ -110,4 +110,8 @@ export class Expedition {
   get secondsLeft(): number | undefined {
     return this.endDate ? Math.floor((this.endDate.getTime() - new Date().getTime())/1000) : undefined 
   }
+
+  get shortID(): string {
+    return this.id ? this.id.substring(0,6) : ''
+  }
 }
