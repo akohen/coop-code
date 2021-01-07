@@ -81,7 +81,7 @@ export const pg:Backend = {
         [expedition.type, expedition.endDate, expedition.export(), expedition.status]
       )
       expedition.id = expeditionData.expedition_id
-      return Promise.resolve(expedition)
+      return expedition
     } catch (error) {
       console.error(error.message)
       throw new Error('Unable to create expedition')
@@ -90,7 +90,6 @@ export const pg:Backend = {
   },
 
   async update(ctx): Promise<void> {
-    console.log(ctx.player)
     try {
       const values =  (ctx.player.expedition.type == 'hq') ? 
         [ctx.player.nodes,undefined,undefined,ctx.player.name] : 
@@ -112,8 +111,6 @@ export const pg:Backend = {
       console.error(error.message)
       throw new Error('Error during state save')
     }
-    return Promise.resolve()
+    return
   }
 }
-
-
