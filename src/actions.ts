@@ -27,6 +27,7 @@ function available (ctx: Context): Map<string,Command> {
 async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
   if(!ctx.player.expedition.inProgress) {
     ctx.player.returnToHQ()
+    ctx.backend.update(ctx)
     return {
       output: 'Expedition completed !',
       prompt: ctx.player.prompt,

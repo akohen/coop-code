@@ -3,7 +3,7 @@ import { Expedition } from "../src/expedition";
 import { Player } from "../src/player";
 import { Node } from "../src/typings";
 import { mocked } from 'ts-jest/utils';
-import { backend } from "../src/backends/memory";
+import { memory } from "../src/backends/memory";
 
 
 
@@ -18,7 +18,7 @@ describe("Action module", () => {
   
   const player = new Player('foo')
   const expedition = new Expedition('test', {nodes}).addPlayer(player)
-  const mockedBackend = mocked(backend, true)
+  const mockedBackend = mocked(memory, true)
   const ctx = {player, expedition, backend: mockedBackend}
 
   it("should be able to execute a test", () => {

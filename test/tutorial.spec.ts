@@ -1,7 +1,7 @@
 import { execute } from "../src/actions";
 import { Player } from "../src/player";
 import { Context, ExpeditionStatus } from "../src/typings";
-import { backend } from "../src/backends/memory";
+import { memory } from "../src/backends/memory";
 import { tutorial } from "../src/expeditions/tutorial";
 
 describe("Tutorial", () => {
@@ -9,7 +9,7 @@ describe("Tutorial", () => {
   beforeEach(() => {
     const player = new Player('foo')
     const expedition = tutorial.create().addPlayer(player)
-    ctx = {player, expedition, backend}
+    ctx = {player, expedition, backend:memory}
   })
 
   it("should be traversable without unexpected errors", async () => {

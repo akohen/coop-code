@@ -2,7 +2,7 @@ import { execute } from "../src/actions";
 import { Expedition } from "../src/expedition";
 import { Player } from "../src/player";
 import { Context, Node } from "../src/typings";
-import { backend } from "../src/backends/memory";
+import { memory } from "../src/backends/memory";
 
 describe("Commands", () => {
   let ctx: Context
@@ -22,7 +22,7 @@ describe("Commands", () => {
     
     const player = new Player('foo')
     const expedition = new Expedition('test', {nodes}).addPlayer(player)
-    ctx = {player, expedition, backend}
+    ctx = {player, expedition, backend: memory}
   })
 
   describe("echo", () => {

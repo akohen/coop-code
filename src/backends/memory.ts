@@ -7,7 +7,7 @@ import { Backend } from "../typings";
 const expeditions:Map<string,Expedition> = new Map()
 const players:Map<string,Player> = new Map()
 
-export const backend:Backend = {
+export const memory:Backend = {
   getPlayer(player: string): Promise<Player | undefined> {
     return Promise.resolve(players.get(player))
   },
@@ -42,4 +42,4 @@ export const backend:Backend = {
 const bob = new Player('bob')
 players.set('foo', new Player('foo'))
 players.set('bob', bob)
-backend.createExpedition(tutorial.create().addPlayer(bob), 'tutorial')
+memory.createExpedition(tutorial.create().addPlayer(bob), 'tutorial')

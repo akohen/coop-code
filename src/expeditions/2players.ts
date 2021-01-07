@@ -25,7 +25,7 @@ Use the expedition command to see how to invite someone to join you.`,
 };
 
 function create(): Expedition {
-  const exp = new Expedition('2-players', {nodes, startNode, endCondition:'locked1-unlock'})
+  const exp = new Expedition('two-players', {nodes, startNode, endCondition:'locked1-unlock'})
   exp.addModule(locked('locked1', 
     {welcome:'welcome', prompt:'Enter your access code>', secret:'secret', locked:'locked', unlock:'unlock', fail:'fail'},
     {welcome: () => '', isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('branch1')||false)},

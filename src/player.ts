@@ -1,6 +1,6 @@
 import { Expedition } from "./expedition"
 import { hq } from "./hq"
-import { Node } from "./typings"
+import { ExpeditionStatus, Node } from "./typings"
 
 export class Player {
     name: string
@@ -14,7 +14,7 @@ export class Player {
     }
   
     returnToHQ(): void {
-      if(this.expedition && !this.expedition.isComplete) this.expedition.removePlayer(this)
+      if(this.expedition && this.expedition.status == ExpeditionStatus.InProgress) this.expedition.removePlayer(this)
       this.expedition = hq
       this.nodes = ['HQ']
     }
