@@ -10,12 +10,13 @@ pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err)
 })
 
-const restoreExpedition = (data:{type: string, variables:string, expedition_id:string, players:string[], enddate:Date|undefined}) => {
+const restoreExpedition = (data:{type: string, variables:string, expedition_id:string, players:string[], enddate:Date|undefined, last_updated:Date}) => {
   const factory = expeditionFactories.get(data.type)
   if(!factory) throw new Error('Unable to restore expedition') //TODO maybe this should reset to HQ and display an error ?
   const expedition = factory.load(data.variables)
   expedition.id = data.expedition_id
   expedition.players = data.players
+  expedition.lastUpdated = data.last_updated
   if(data.enddate) expedition.endDate = data.enddate
   return expedition
 }
@@ -63,9 +64,13 @@ export const pg:Backend = {
     }
   },
 
-  async listExpeditions() {
+  async listExpeditions(player?:string) {
     try {
-      const { rows } = await pool.query('SELECT * FROM expeditions WHERE status = $1 LIMIT 50', [ExpeditionStatus.InProgress])
+      const query = player ? 
+        'SELECT * FROM expeditions WHERE status != $1 AND $2 = ANY(players) ORDER BY last_updated DESC LIMIT 25' :
+        'SELECT * FROM expeditions WHERE status = $1 AND (enddate IS NULL OR enddate > now()) ORDER BY last_updated DESC LIMIT 25'
+      const variables = player ? [ExpeditionStatus.InProgress, player] : [ExpeditionStatus.InProgress]
+      const { rows } = await pool.query(query, variables)
       if(!rows) return []
       return rows.map(r => restoreExpedition(r))
     } catch (error) {

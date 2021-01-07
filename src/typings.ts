@@ -39,7 +39,7 @@ export interface Backend {
   getPlayer:        (player: string) => Promise<Player | undefined>,
   createPlayer:     (name: string) => Promise<Player>,
   getExpedition:    (name: string) => Promise<Expedition | undefined>,
-  listExpeditions:  () => Promise<Array<Expedition>>,
+  listExpeditions:  (player?: string) => Promise<Array<Expedition>>,
   createExpedition: (exp: Expedition, id?: string) => Promise<Expedition>,
   update:           (ctx: Context) => Promise<void>,
 }

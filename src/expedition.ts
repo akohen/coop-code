@@ -12,6 +12,7 @@ export class Expedition {
   type: string
   endCondition: string;
   endDate?: Date
+  lastUpdated: Date
 
   constructor(
     type: string,
@@ -32,6 +33,7 @@ export class Expedition {
     this.commands = new Map()
     this.endCondition = endCondition ? endCondition : 'complete'
     this.endDate = endDate
+    this.lastUpdated = new Date()
   }
 
   addPlayer(player: Player): Expedition {

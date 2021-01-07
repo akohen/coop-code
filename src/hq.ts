@@ -1,3 +1,4 @@
+import { history } from "./commands/expedition_history";
 import { Expedition } from "./expedition";
 import { expeditionFactories } from "./expeditions";
 import { AsyncCommand, Node } from "./typings";
@@ -40,6 +41,8 @@ const cmd: AsyncCommand = {
       const expeditions = await ctx.backend.listExpeditions()
       if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
       return toTable(['id', 'type', 'players'], expeditions.map(e => [e.shortID, e.type, (e.players.length).toString()]))
+    } else if(argv[0] == 'history') {
+      return history(ctx, argv[1])
     }
 
     return cmd.help?.(true)
@@ -48,7 +51,8 @@ const cmd: AsyncCommand = {
     ['expedition create','List expeditions available for creation'],
     ['expedition create [type]','Create a new expedition of the selected type'],
     ['expedition join','list all joinable expeditions (in progress, public, with room for new players)'],
-    ['expedition join [id]', 'Join the specified expedition']
+    ['expedition join [id]', 'Join the specified expedition'],
+    ['expedition history', 'See your past expeditions'],
   ],{pad:2}) : 'Create and join expeditions'}
 hq.commands.set('expedition', cmd)
 
