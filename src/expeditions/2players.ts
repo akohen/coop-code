@@ -5,7 +5,7 @@ import { locked } from "./nodes/locked";
 
 const commonFiles = {architecture: "Hints go here"}
 const startNode = (player: Player) => {
-  return (player.expedition.players.size % 2) ? 'start1' : 'start2'
+  return (player.expedition.players.length % 2) ? 'start1' : 'start2'
 }
 
 const nodes: {[idx: string]: Node} = {

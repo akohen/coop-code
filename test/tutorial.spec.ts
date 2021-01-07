@@ -7,8 +7,9 @@ import { tutorial } from "../src/expeditions/tutorial";
 describe("Tutorial", () => {
   let ctx: Context
   beforeEach(() => {
-    const expedition = tutorial.create().addPlayer(new Player('foo'))
-    ctx = {player: expedition.players.get('foo') as Player, expedition, backend}
+    const player = new Player('foo')
+    const expedition = tutorial.create().addPlayer(player)
+    ctx = {player, expedition, backend}
   })
 
   it("should be traversable without unexpected errors", async () => {

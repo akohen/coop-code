@@ -2,7 +2,7 @@ import { Player } from './player';
 import { Command, ExpeditionModule, Node, Runnable, ExpeditionStatus, AsyncCommand } from './typings';
 
 export class Expedition {
-  players: Map<string, Player>;
+  players: Array<string>;
   nodes: Map<string, Node>;
   setters: Map<string, Runnable>;
   variables: Map<string,string | number | boolean>;
@@ -24,7 +24,7 @@ export class Expedition {
     } = {}
   ) {
     this.type = type
-    this.players = new Map();
+    this.players = [];
     this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
     this.setters = setters ? new Map(Object.entries(setters)) : new Map()
     this.variables = new Map()
@@ -35,14 +35,14 @@ export class Expedition {
   }
 
   addPlayer(player: Player): Expedition {
-    this.players.set(player.name, player)
+    this.players.push(player.name)
     player.expedition = this
     player.nodes = [this.startNode(player)]
     return this
   }
 
   removePlayer(player: Player): Expedition {
-    this.players.delete(player.name)
+    this.players = this.players.filter(p => p!= player.name)
     return this
   }
 

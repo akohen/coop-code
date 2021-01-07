@@ -16,9 +16,10 @@ describe("Action module", () => {
     },
   };
   
-  const expedition = new Expedition('test', {nodes}).addPlayer(new Player('foo'))
+  const player = new Player('foo')
+  const expedition = new Expedition('test', {nodes}).addPlayer(player)
   const mockedBackend = mocked(backend, true)
-  const ctx = {player: expedition.players.get('foo') as Player, expedition, backend: mockedBackend}
+  const ctx = {player, expedition, backend: mockedBackend}
 
   it("should be able to execute a test", () => {
     expect(true).toBeTruthy()

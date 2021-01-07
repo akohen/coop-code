@@ -6,7 +6,7 @@ export const expedition:Command = {
     if(ctx.expedition.type == 'hq') return 'At HQ'
     return toList([
       ['Expedition ID', `${ctx.expedition.id} - Other players can join with 'expedition join ${ctx.expedition.id}'`],
-      ['Players', Array.from(ctx.expedition.players.values()).map(p => p.name).join(' ')],
+      ['Players', ctx.expedition.players.join(' ')],
       ['Time Left', ctx.expedition.secondsLeft != undefined ? timeFormat(ctx.expedition.secondsLeft) : 'Unlimited'],
       ['Status', ctx.expedition.status],
     ], {emphasize:true})

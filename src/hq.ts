@@ -39,7 +39,7 @@ const cmd: AsyncCommand = {
       }
       const expeditions = await ctx.backend.listExpeditions()
       if(expeditions.length == 0) return "No expeditions to join, you need to create one with expedition create"
-      return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.size).toString()]))
+      return toTable(['id', 'type', 'players'], expeditions.map(e => [e.id as string, e.type, (e.players.length).toString()]))
     }
 
     return cmd.help?.(true)
