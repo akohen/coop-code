@@ -15,7 +15,7 @@ const nodes: {[idx: string]: Node} = {
     files: {'how-to':`In each expedition, you're trying to recover data from a ship before the timer runs out.
 You can use different commands to navigate the ship's systems.
 The command you've just used is ${em('read')} and allows you to open files by giving it the name of the file you want to open. 
-It this case, you've opened the 'how-to' file.
+In this case, you've opened the 'how-to' file.
 To continue, you'll need to use the ${em('ls')} command to list the files on this system, then the ${em('read')} command to open it.`,
 next:`Let's go to another system using the ${em('connect')} command.
 The system we want to connect to is called 'terminal-a6b1'.
