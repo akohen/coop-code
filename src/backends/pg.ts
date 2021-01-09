@@ -29,8 +29,12 @@ export const pg:Backend = {
       const player = new Player(playerData.name)
     
       if(!playerData.type) return player
-      //TODO maybe unknown type should reset to HQ and display an error ?
-      player.expedition = restoreExpedition(playerData)
+      try {
+        player.expedition = restoreExpedition(playerData)
+      } catch (error) {
+        player.returnToHQ()
+        return player
+      }
 
       if(playerData.nodes) player.nodes = playerData.nodes
       if(playerData.input) player.input = playerData.input
