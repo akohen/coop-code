@@ -1,5 +1,6 @@
 import { Expedition } from "../expedition";
 import { Context, Node } from "../typings";
+import { remindTime } from "./functions/exec_commands";
 import { doc } from "./nodes/doc";
 import { locked } from "./nodes/locked";
 
@@ -26,7 +27,9 @@ function create(): Expedition {
       .set('doc3', doc('Welcome',{'name': 'content'}))
     exp.commands
       .set('expedition-specific',{run:(ctx, args) => (args)})
-    exp.addModule(locked('locked2', {welcome:'welcome', prompt:'prompt>', secret:'secret',locked:'locked'}))
+    exp
+      .addModule(locked('locked2', {welcome:'welcome', prompt:'prompt>', secret:'secret',locked:'locked'}))
+      .addModule(remindTime)
   return exp
 }
 
