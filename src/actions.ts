@@ -1,10 +1,6 @@
 import { commands } from './commands/index';
 import { appResponse, AsyncCommand, Command, Context } from './typings';
-import { parseCommand } from './utils';
-
-function append(str?:string, toAppend?: string) {
-  return str ? str + '\n' + toAppend : toAppend
-}
+import { parseCommand, append } from './utils';
 
 function isAvailable(ctx: Context, cmd: Command|AsyncCommand): boolean {
   return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
@@ -50,7 +46,8 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
     }
 
     if(ctx.player.expedition.commands.has('_exec_')) {
-      output = append(output, await ctx.player.expedition.commands.get('_exec_')?.run(ctx))
+      try { output = append(output, await ctx.player.expedition.commands.get('_exec_')?.run(ctx)) } 
+      catch (error) { errors = append(errors,error.message) }
     }
   }
 

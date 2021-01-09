@@ -29,3 +29,7 @@ export function parseCommand(input: string): {cmd: string, rest?: string, lines:
     return { cmd: input.substring(0,index), rest: input.substring(index+1), lines, argv: lines[0].split(' '), input }
   return { cmd: input, rest: undefined, lines, argv: lines[0].split(' '), input }
 }
+
+export function append(str:string | undefined, toAppend: string | undefined): string | undefined {
+  return str ? str + '\n' + toAppend : toAppend
+}
