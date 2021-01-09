@@ -48,7 +48,7 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
 
   if(!ctx.player.expedition.inProgress) {
     output = output ? output + '\n' : ''
-    output += 'Expedition completed !'
+    output += ctx.player.expedition.debriefScreen()
     ctx.player.returnToHQ()
   }
   

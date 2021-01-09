@@ -116,4 +116,8 @@ export class Expedition {
   get shortID(): string {
     return this.id ? this.id.substring(0,6) : ''
   }
+
+  debriefScreen(): string {
+    return 'Expedition completed !'
+  }
 }
