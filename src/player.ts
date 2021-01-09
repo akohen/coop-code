@@ -7,6 +7,7 @@ export class Player {
     nodes!: [string]
     expedition!: Expedition
     input?: string
+    prevExpedition?: Expedition
   
     constructor(name: string) {
       this.name = name
@@ -14,6 +15,7 @@ export class Player {
     }
   
     returnToHQ(): void {
+      if(this.expedition) this.prevExpedition = this.expedition
       if(this.expedition && this.expedition.status == ExpeditionStatus.InProgress) this.expedition.removePlayer(this)
       this.expedition = hq
       this.nodes = ['HQ']

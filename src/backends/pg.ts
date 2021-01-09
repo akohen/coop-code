@@ -113,10 +113,10 @@ export const pg:Backend = {
           [ctx.expedition.export(), ctx.expedition.status, ctx.expedition.players, ctx.expedition.id]
         )
       }
-      if(ctx.player.expedition.type != 'hq' && ctx.player.expedition != ctx.expedition) {
+      if(ctx.player.prevExpedition && ctx.player.prevExpedition.type != 'hq') {
         await pool.query(
           'UPDATE expeditions SET variables = $1, status = $2, players = $3 WHERE expedition_id = $4',
-          [ctx.player.expedition.export(), ctx.player.expedition.status, ctx.player.expedition.players, ctx.player.expedition.id]
+          [ctx.player.prevExpedition.export(), ctx.player.prevExpedition.status, ctx.player.prevExpedition.players, ctx.player.prevExpedition.id]
         )
       }
     } catch (error) {

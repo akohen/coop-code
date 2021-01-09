@@ -12,7 +12,7 @@ export default async (playerName: string, command: string, backend: Backend) : P
     return {data: {output: `Player ${playerName} created.\nType 'help' for commands`, prompt: player.prompt}}
   }
   try {
-    const ctx = {player, expedition:player.expedition, backend}
+    const ctx = {player, get expedition() {return this.player.expedition}, backend}
     return {data:await execute(ctx, command)}
   } catch (error) {
     return {
