@@ -2,6 +2,12 @@ import { commands } from './commands/index';
 import { appResponse, AsyncCommand, Command, Context } from './typings';
 import { parseCommand, append } from './utils';
 
+function getArgs(str1?:string, str2?:string): string | undefined {
+  if(!str1) return str2
+  if(!str2) return str1
+  return str1 + ' ' + str2
+}
+
 function isAvailable(ctx: Context, cmd: Command|AsyncCommand): boolean {
   return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
 }
@@ -36,13 +42,16 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
       }
       catch (error) { errors = error.message }
     } else if (cmdString !== '') {
-      const command = parseCommand(cmdString)
-      const cmd = getAvailable(ctx, command.cmd)
-      if (cmd) {
-        try { output = await cmd.run(ctx, command.rest) } 
-        catch (error) { errors = error.message }
+      for(const segment of cmdString.split('|')) {
+        const command = parseCommand(segment.trimLeft())
+        const cmd = getAvailable(ctx, command.cmd)
+        if (cmd) {
+          try { output = await cmd.run(ctx, getArgs(command.rest, output)) } 
+          catch (error) { errors = error.message }
+        }
+        else { errors = 'Invalid command' }
       }
-      else { errors = 'Invalid command' }
+      
     }
 
     for(const cmd of ctx.expedition.autoCommands()) {

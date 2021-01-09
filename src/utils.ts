@@ -23,10 +23,12 @@ export function timeLeft(date: Date): string {
 }
 
 export function parseCommand(input: string): {cmd: string, rest?: string, lines: string[], argv: string[], input: string} {
-  const index = input.indexOf(' ')
+  const spaces = input.indexOf(' ')
+  const newLine = input.indexOf('\n')
+  const index = (spaces >= 0 && newLine >= 0) ? Math.min(spaces, newLine) : Math.max(spaces, newLine)
   const lines = input.split('\n')
-  if(index > 0)
-    return { cmd: input.substring(0,index), rest: input.substring(index+1), lines, argv: lines[0].split(' '), input }
+  if(index >= 0)
+    return { cmd: input.substring(0,index), rest: input.substring(index+1).trim(), lines, argv: lines[0].split(' '), input }
   return { cmd: input, rest: undefined, lines, argv: lines[0].split(' '), input }
 }
 
