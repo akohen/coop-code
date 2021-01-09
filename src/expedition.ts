@@ -120,4 +120,11 @@ export class Expedition {
   debriefScreen(): string {
     return 'Expedition completed !'
   }
+
+  *autoCommands(): Generator<Command|AsyncCommand> {
+    for(const cmd of this.commands.entries()) {
+      if(cmd[0].startsWith('_auto_'))
+      yield cmd[1]
+    }
+  }
 }

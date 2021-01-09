@@ -45,8 +45,8 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
       else { errors = 'Invalid command' }
     }
 
-    if(ctx.player.expedition.commands.has('_exec_')) {
-      try { output = append(output, await ctx.player.expedition.commands.get('_exec_')?.run(ctx)) } 
+    for(const cmd of ctx.expedition.autoCommands()) {
+      try { output = append(output, await cmd.run(ctx)) } 
       catch (error) { errors = append(errors,error.message) }
     }
   }

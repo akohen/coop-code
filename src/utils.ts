@@ -31,5 +31,6 @@ export function parseCommand(input: string): {cmd: string, rest?: string, lines:
 }
 
 export function append(str:string | undefined, toAppend: string | undefined): string | undefined {
+  if(!toAppend) return str
   return str ? str + '\n' + toAppend : toAppend
 }
