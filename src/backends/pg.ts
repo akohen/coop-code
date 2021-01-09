@@ -55,7 +55,10 @@ export const pg:Backend = {
 
   async getExpedition(id: string) {
     try {
-      const { rows:[expeditionData] } = await pool.query('SELECT * FROM expeditions WHERE expedition_id::text LIKE $1 LIMIT 1', [id+'%'])
+      const { rows:[expeditionData] } = await pool.query(
+        'SELECT * FROM expeditions WHERE status = $1 AND expedition_id::text LIKE $2 LIMIT 1',
+        [ExpeditionStatus.InProgress, id+'%']
+      )
       if(!expeditionData) return
       return restoreExpedition(expeditionData)
     } catch (error) {

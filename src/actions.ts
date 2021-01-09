@@ -1,5 +1,6 @@
 import { commands } from './commands/index';
 import { appResponse, AsyncCommand, Command, Context } from './typings';
+import { parseCommand } from './utils';
 
 function isAvailable(ctx: Context, cmd: Command|AsyncCommand): boolean {
   return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
@@ -25,31 +26,24 @@ function available (ctx: Context): Map<string,Command> {
 }
 
 async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
-  if(!ctx.player.expedition.inProgress) {
-    ctx.player.returnToHQ()
-    ctx.backend.update(ctx)
-    return {
-      output: 'Expedition completed !',
-      prompt: ctx.player.prompt,
-      expedition: {state:getState(ctx), path: ctx.player.nodes}
-    }
-  }
   let output, errors
-  if (ctx.player.input != undefined) {
-    try {
-      const cmd = ctx.expedition.commands.get(ctx.player.input)
-      delete ctx.player.input
-      output = await cmd?.run(ctx, cmdString)
-    }
-    catch (error) { errors = error.message }
-  } else if (cmdString !== '') {
-    const args = cmdString.split(/ +(.*)/)
-    const cmd = getAvailable(ctx, args[0])
-    if (cmd) {
-      try { output = await cmd.run(ctx, args[1]) } 
+  if(ctx.player.expedition.inProgress) { // command is ignored in completed expeditions
+    if (ctx.player.input != undefined) {
+      try {
+        const cmd = ctx.expedition.commands.get(ctx.player.input)
+        delete ctx.player.input
+        output = await cmd?.run(ctx, cmdString)
+      }
       catch (error) { errors = error.message }
+    } else if (cmdString !== '') {
+      const command = parseCommand(cmdString)
+      const cmd = getAvailable(ctx, command.cmd)
+      if (cmd) {
+        try { output = await cmd.run(ctx, command.rest) } 
+        catch (error) { errors = error.message }
+      }
+      else { errors = 'Invalid command' }
     }
-    else { errors = 'Invalid command' }
   }
 
   if(!ctx.player.expedition.inProgress) {

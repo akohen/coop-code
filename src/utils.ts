@@ -21,3 +21,9 @@ export function timeLeft(date: Date): string {
   const diff = date.getTime() - new Date().getTime()
   return timeFormat(Math.floor(diff/1000))
 }
+
+export function parseCommand(input: string): {cmd: string, rest?: string, lines: string[], argv: string[], input: string} {
+  const index = input.indexOf(' ')
+  const lines = input.split('\n')
+  return { cmd: input.substring(0,index), rest: input.substring(index+1), lines, argv: lines[0].split(' '), input }
+}
