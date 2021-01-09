@@ -62,11 +62,11 @@ export class Expedition {
   }
 
   export(): string {
-    return JSON.stringify({'variables':[...this.variables]})
+    return JSON.stringify([...this.variables])
   }
 
   load(data: string): Expedition {
-    const {variables} = JSON.parse(data)
+    const variables = JSON.parse(data)
     this.variables = new Map(variables)
     return this
   }

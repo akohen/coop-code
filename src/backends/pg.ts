@@ -67,7 +67,7 @@ export const pg:Backend = {
       return restoreExpedition(expeditionData)
     } catch (error) {
       console.error(error.message)
-      throw new Error('Unable to get user')
+      throw new Error(`Unable to get expedition ${id}`)
     }
   },
 
@@ -82,7 +82,7 @@ export const pg:Backend = {
       return rows.map(r => restoreExpedition(r))
     } catch (error) {
       console.error(error.message)
-      throw new Error('Unable to get user')
+      throw new Error('Unable to list expeditions')
     }
   },
 
