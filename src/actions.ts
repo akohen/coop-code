@@ -2,6 +2,10 @@ import { commands } from './commands/index';
 import { appResponse, AsyncCommand, Command, Context } from './typings';
 import { parseCommand } from './utils';
 
+function append(str?:string, toAppend?: string) {
+  return str ? str + '\n' + toAppend : toAppend
+}
+
 function isAvailable(ctx: Context, cmd: Command|AsyncCommand): boolean {
   return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
 }
@@ -44,11 +48,14 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
       }
       else { errors = 'Invalid command' }
     }
+
+    if(ctx.player.expedition.commands.has('_exec_')) {
+      output = append(output, await ctx.player.expedition.commands.get('_exec_')?.run(ctx))
+    }
   }
 
   if(!ctx.player.expedition.inProgress) {
-    output = output ? output + '\n' : ''
-    output += ctx.player.expedition.debriefScreen()
+    output = append(output, ctx.player.expedition.debriefScreen())
     ctx.player.returnToHQ()
   }
   
