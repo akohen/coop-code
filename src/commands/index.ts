@@ -8,6 +8,7 @@ import { ls } from "./ls";
 import { read } from "./read";
 import { scan } from "./scan";
 import { set } from "./set";
+import { tail } from "./tail";
 
 export const commands:Map<string, Command> = new Map(Object.entries({
   connect,
@@ -19,4 +20,5 @@ export const commands:Map<string, Command> = new Map(Object.entries({
   read,
   scan,
   set,
+  tail,
 }));

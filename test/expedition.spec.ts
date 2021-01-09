@@ -25,11 +25,11 @@ describe("Expedition", () => {
       ctx.expedition.variables.set('foo','bar')
       ctx.expedition.variables.set('bool',true)
       const exportString = ctx.expedition.export()
-      expect(exportString).toBe('{"variables":[["foo","bar"],["bool",true]]}')
+      expect(exportString).toBe('[["foo","bar"],["bool",true]]')
     })
 
     it("Should be able to import variables from a string", () => {
-      ctx.expedition.load('{"variables":[["foo","bar"],["bool",true]]}')
+      ctx.expedition.load('[["foo","bar"],["bool",true]]')
       expect(ctx.expedition.variables.get('foo')).toBe('bar')
       expect(ctx.expedition.variables.get('bool')).toBe(true)
     })

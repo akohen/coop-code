@@ -32,7 +32,7 @@ function available (ctx: Context): Map<string,Command> {
 }
 
 async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
-  let output, errors
+  let output:string | undefined, errors
   if(ctx.player.expedition.inProgress) { // command is ignored in completed expeditions
     if (ctx.player.input != undefined) {
       try {
@@ -46,7 +46,7 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
         const command = parseCommand(segment.trimLeft())
         const cmd = getAvailable(ctx, command.cmd)
         if (cmd) {
-          try { output = await cmd.run(ctx, getArgs(command.rest, output)) } 
+          try { output = await cmd.run(ctx, getArgs(command.rest, output?.trim())) } 
           catch (error) { errors = error.message }
         }
         else { errors = 'Invalid command' }
