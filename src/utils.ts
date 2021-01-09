@@ -25,5 +25,7 @@ export function timeLeft(date: Date): string {
 export function parseCommand(input: string): {cmd: string, rest?: string, lines: string[], argv: string[], input: string} {
   const index = input.indexOf(' ')
   const lines = input.split('\n')
-  return { cmd: input.substring(0,index), rest: input.substring(index+1), lines, argv: lines[0].split(' '), input }
+  if(index > 0)
+    return { cmd: input.substring(0,index), rest: input.substring(index+1), lines, argv: lines[0].split(' '), input }
+  return { cmd: input, rest: undefined, lines, argv: lines[0].split(' '), input }
 }
