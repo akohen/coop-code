@@ -13,7 +13,7 @@ create:(variables) => {
   users[5] = 'admin'
   const passwords = sampleData.passwords.fakeWords.sample(10)
   const pwd1 = passwords[5]
-  const passwd = passwdGen(users, passwords.map(e => ceasar(e)))
+  const passwd = passwdGen(users, passwords.map(e => ceasar(e,6)))
   const nodes: {[idx: string]: Node} = {
     'access-point': {
       welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${sampleData.passwords.fakeWords.random()}`,
