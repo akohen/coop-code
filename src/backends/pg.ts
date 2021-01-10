@@ -12,12 +12,15 @@ pool.on('error', (err) => {
 
 const restoreExpedition = (data:{type: string, variables:string, expedition_id:string, players:string[], enddate:Date|undefined, last_updated:Date}) => {
   const factory = expeditionFactories.get(data.type)
-  if(!factory) throw new Error('Unable to restore expedition') //TODO maybe this should reset to HQ and display an error ?
-  const expedition = factory.load(data.variables)
-  expedition.id = data.expedition_id
-  expedition.players = data.players
-  expedition.lastUpdated = data.last_updated
-  if(data.enddate) expedition.endDate = data.enddate
+  if(!factory) throw new Error('Unable to restore expedition')
+  const variables:Map<string,string|number|boolean> = new Map(JSON.parse(data.variables))
+  const expedition = factory.create({
+    id:data.expedition_id,
+    players: data.players,
+    last_updated: data.last_updated,
+    enddate: data.enddate,
+    variables,
+  })
   return expedition
 }
 

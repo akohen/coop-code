@@ -14,7 +14,7 @@ const nodes: {[idx: string]: Node} = {
 function create(): Expedition {
   const endDate = new Date()
   endDate.setSeconds(endDate.getSeconds() + 10)
-  const exp = new Expedition('exp1',{
+  const exp = new Expedition({
     nodes, endDate, setters: {
       foo: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('foo', Number(arg))
@@ -33,8 +33,4 @@ function create(): Expedition {
   return exp
 }
 
-function load(data: string): Expedition {
-  return create().load(data)
-}
-
-export const exp1 = {create, load}
+export const exp1 = {create}

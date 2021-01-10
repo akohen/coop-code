@@ -1,4 +1,5 @@
 import { Expedition } from "../expedition";
+import { ExpeditionFactory } from "../expedition-factory";
 import { Context, Node } from "../typings";
 import { em } from "../utils";
 import { useless } from "./data/files"
@@ -44,11 +45,10 @@ This will show all the systems you are currently connected to, and which ones ca
 };
 
 
-function create(): Expedition {
+function create(variables: Map<string, string | number | boolean>): Expedition {
   const endDate = new Date()
   endDate.setMinutes(endDate.getMinutes() + 60)
-  const exp = new Expedition('tutorial',
-    {
+  const exp = new Expedition({
       nodes,
       setters: {
         completed: (ctx: Context, arg?: string) => {
@@ -57,6 +57,7 @@ function create(): Expedition {
         },
       },
       endDate,
+      variables
   })
     exp.commands.set('_unlock-first-lock',lockCmd({
       name:'first-lock',
@@ -68,8 +69,4 @@ function create(): Expedition {
   return exp
 }
 
-function load(data: string): Expedition {
-  return create().load(data)
-}
-
-export const tutorial = {create, load, players:1, difficulty:'trivial'}
+export const tutorial = new ExpeditionFactory({type:'tutorial', create, players:1, difficulty:'trivial'})

@@ -15,20 +15,21 @@ export class Expedition {
   lastUpdated: Date
 
   constructor(
-    type: string,
-    {nodes, setters, startNode, endCondition, endDate} : {
+    {type, nodes, setters, startNode, endCondition, endDate, variables} : {
+      type?: string,
       nodes?: {[idx: string]: Node}, 
       setters?: { [id: string]: Runnable },
       startNode?: (player: Player) => string,
       endCondition?: string,
-      endDate?: Date
+      endDate?: Date,
+      variables?: Map<string,string | number | boolean>,
     } = {}
   ) {
-    this.type = type
+    this.type = (type) ? type : ''
     this.players = [];
     this.nodes = nodes ? new Map(Object.entries(nodes)) : new Map()
     this.setters = setters ? new Map(Object.entries(setters)) : new Map()
-    this.variables = new Map()
+    this.variables = variables ? variables : new Map()
     this.startNode = (startNode) ? startNode : () => { return 'start'}
     this.commands = new Map()
     this.endCondition = endCondition ? endCondition : 'complete'
@@ -65,36 +66,6 @@ export class Expedition {
     return JSON.stringify([...this.variables])
   }
 
-  load(data: string): Expedition {
-    const variables = JSON.parse(data)
-    this.variables = new Map(variables)
-    return this
-  }
-
-  exportNodes(): string {
-    const exportNodes: [string, unknown][] = [...this.nodes].map(([nodeName, node]) => ([
-      nodeName, 
-      {
-        ...node,
-        welcome: node.welcome?.toString(),
-        isAvailable: node.isAvailable ? node.isAvailable.toString() : undefined,
-      }
-    ]))
-    
-    return JSON.stringify(exportNodes)
-  }
-
-  importNodes(nodes: string): Expedition { // Why did I do this ?
-    const imported:[string,Node][] = JSON.parse(nodes)
-    
-    const importedNodes: [string, Node][] = imported.map(([key, value]) => {
-      const node = {...value, welcome: new Function("return "+ value.welcome?.toString())()} as Node
-      return [ key, node ]
-    })
-    this.nodes = new Map(importedNodes)
-    return this
-  }
-
   get isComplete():boolean {
     return !!this.variables.get(this.endCondition)
   }
@@ -123,8 +94,7 @@ export class Expedition {
 
   *autoCommands(): Generator<Command|AsyncCommand> {
     for(const cmd of this.commands.entries()) {
-      if(cmd[0].startsWith('_auto_'))
-      yield cmd[1]
+      if(cmd[0].startsWith('_auto_')) yield cmd[1]
     }
   }
 }

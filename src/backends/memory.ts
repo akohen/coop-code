@@ -1,5 +1,4 @@
 import { Player } from "../player"
-import { tutorial } from "../expeditions/tutorial";
 import { Expedition } from "../expedition";
 import { Backend } from "../typings";
 
@@ -42,4 +41,3 @@ export const memory:Backend = {
 const bob = new Player('bob')
 players.set('foo', new Player('foo'))
 players.set('bob', bob)
-memory.createExpedition(tutorial.create().addPlayer(bob), 'tutorial')

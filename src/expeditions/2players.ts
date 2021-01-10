@@ -26,7 +26,7 @@ Use the expedition command to see how to invite someone to join you.`,
 };
 
 function create(): Expedition {
-  const exp = new Expedition('two-players', {nodes, startNode, endCondition:'locked1-unlock'})
+  const exp = new Expedition({nodes, startNode, endCondition:'locked1-unlock'})
   exp
     .addModule(locked('locked1', 
       {welcome:'welcome', prompt:'Enter your access code>', secret:'secret', locked:'locked', unlock:'unlock', fail:'fail'},
@@ -40,8 +40,4 @@ function create(): Expedition {
   return exp
 }
 
-function load(data: string): Expedition {
-  return create().load(data)
-}
-
-export const exp = {create, load, players:2}
+export const exp = {create, players:2}
