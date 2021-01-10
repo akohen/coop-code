@@ -8,25 +8,25 @@ function getArgs(str1?:string, str2?:string): string | undefined {
   return str1 + ' ' + str2
 }
 
-function isAvailable(ctx: Context, cmd: Command|AsyncCommand): boolean {
-  return Boolean(!cmd.isAvailable || cmd.isAvailable?.(ctx))
+function isAvailable(ctx: Context, cmd: Command|AsyncCommand, cmdName: string): boolean {
+  return !cmdName.startsWith('_') && (!cmd.isAvailable || cmd.isAvailable?.(ctx))
 }
 
 function getAvailable(ctx: Context, cmdName: string): Command | AsyncCommand | undefined {
   let cmd = ctx.expedition.commands.get(cmdName)
-  if( cmd && isAvailable(ctx, cmd) ) return cmd
+  if( cmd && isAvailable(ctx, cmd, cmdName) ) return cmd
   cmd = commands.get(cmdName)
-  if( cmd && isAvailable(ctx, cmd) ) return cmd
+  if( cmd && isAvailable(ctx, cmd, cmdName) ) return cmd
   return undefined
 }
 
 function available (ctx: Context): Map<string,Command> {
   const cmds = new Map();
   for(const [cmdName, cmd] of commands) {
-    if(isAvailable(ctx, cmd)) cmds.set(cmdName, cmd)
+    if(isAvailable(ctx, cmd, cmdName)) cmds.set(cmdName, cmd)
   }
   for(const [cmdName, cmd] of ctx.expedition.commands) {
-    if(isAvailable(ctx, cmd)) cmds.set(cmdName, cmd)
+    if(isAvailable(ctx, cmd, cmdName)) cmds.set(cmdName, cmd)
   }
   return cmds
 }
