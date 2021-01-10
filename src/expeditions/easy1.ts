@@ -2,11 +2,18 @@ import { Expedition } from "../expedition";
 import { ExpeditionFactory } from "../expedition-factory";
 import { Node } from "../typings";
 import { sampleData } from "./data";
+import { passwdGen } from "./data/files";
 import { remindTime } from "./functions/auto_commands";
+import { ceasar } from "./functions/ciphers";
 import { chat } from "./modules/chat";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
 create:(variables) => {
+  const users = sampleData.users.sample(10)
+  users[5] = 'admin'
+  const passwords = sampleData.passwords.fakeWords.sample(10)
+  const pwd1 = passwords[5]
+  const passwd = passwdGen(users, passwords.map(e => ceasar(e)))
   const nodes: {[idx: string]: Node} = {
     'access-point': {
       welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${sampleData.passwords.fakeWords.random()}`,
@@ -18,13 +25,12 @@ create:(variables) => {
         throw new Error('Access denied, enter admin password')
       },
     },
-    logs: {files:{'last-logins':'foo'}},
+    logs: {files:{'last-logins':'foo',passwd}},
     security: {},
   };
 
   const endDate = new Date()
   endDate.setMinutes(endDate.getMinutes() + 60)
-  const pwd1 = sampleData.passwords.fakeWords.random()
   const exp = new Expedition({
       nodes,
       endDate,
