@@ -1,32 +1,38 @@
 import { Expedition } from "../expedition";
 import { ExpeditionFactory } from "../expedition-factory";
 import { Node } from "../typings";
+import { em } from "../utils";
 import { sampleData } from "./data";
 import { passwdGen } from "./data/files";
 import { remindTime } from "./functions/auto_commands";
-import { ceasar } from "./functions/ciphers";
+import { caesar } from "./functions/ciphers";
 import { chat } from "./modules/chat";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
 create:(variables) => {
-  const users = sampleData.users.sample(10)
-  users[5] = 'admin'
-  const passwords = sampleData.passwords.fakeWords.sample(10)
-  const pwd1 = passwords[5]
-  const passwd = passwdGen(users, passwords.map(e => ceasar(e,6)))
+  const [users, passwords] = [sampleData.users.sample(20), sampleData.passwords.fakeWords.sample(20)]
+  const adminID = Math.floor(Math.random()*20)
+  users[adminID] = 'admin'
+  const logins = users.map((v,i) => [v, passwords[i]])
+  const shift = Math.floor(Math.random()*25)+1
+  const passwd = passwdGen(logins, e => caesar(e,shift))
   const nodes: {[idx: string]: Node} = {
     'access-point': {
-      welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${sampleData.passwords.fakeWords.random()}`,
+      welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${sampleData.users.random()}`,
       files:{foo:sampleData.passwords.fakeWords.random()},
     },
     locked: {
       welcome:(ctx) => {
-        ctx.player.input = '_unlock-ceasar'
+        ctx.player.input = '_unlock-caesar'
         throw new Error('Access denied, enter admin password')
       },
     },
     logs: {files:{'last-logins':'foo',passwd}},
-    security: {},
+    security: {
+    },
+    foo:{
+      isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
+    },
   };
 
   const endDate = new Date()
@@ -35,16 +41,24 @@ create:(variables) => {
       nodes,
       endDate,
       startNode: () => 'access-point',
-      variables,
+      variables: new Map([['firewall','enable'], ...variables]),
   })
   exp
     .addModule(chat)
   .commands
     .set('_auto_remindtime', remindTime)
-    .set('_unlock-ceasar',{run:(ctx, args) => {
-      if(args !== pwd1) throw new Error('Incorrect password')
+    .set('_unlock-caesar',{run:(ctx, args) => {
+      if(args !== passwords[adminID]) throw new Error('Incorrect password')
       if(ctx.player.currentNodeName != 'locked') ctx.player.nodes.push('locked')
       return 'Unlocked'
     }, help:() => '>'})
+    .set('firewall',{
+      run: (ctx, args) => {
+        if(args != 'enable' && args != 'disable') throw new Error('Incorrect value.\nAuthorized values are: enable|disable')
+        ctx.expedition.variables.set('firewall',args)
+        return `Firewall ${em(args+'d')}`
+      },
+      isAvailable: (ctx) => (ctx.player.currentNodeName == 'security')
+    })
   return exp
 }})

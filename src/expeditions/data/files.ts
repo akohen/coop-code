@@ -32,9 +32,9 @@ update-alternatives 2063-10-19 16:43:51: run with --quiet --install /usr/bin/cc 
 2063-10-20 17:45:19 user 0675 logged in`],
 ]
 
-export function passwdGen(logins:string[], passwords: string[]):string {
-  return logins.map((login, i) => (
-    `${login}:${passwords[i]}:10${(i+3).toString().padStart(2,'0')}:${(login == 'admin') ? '1001:System Administrator' : '1016:User'}:/home/${login.toLowerCase()}`
+export function passwdGen(users:string[][], cipher:(str:string) => string=e=>e):string {
+  return users.map((u,i) => (
+    `${u[0]}:${cipher(u[1])}:10${(i+2).toString().padStart(2,'0')}:${(u[0] == 'admin') ? '1001:System Administrator' : '1101:User'}:/home/${u[0].toLowerCase()}`
     )).join('\n')
 }
 export const files = {useless, logs}

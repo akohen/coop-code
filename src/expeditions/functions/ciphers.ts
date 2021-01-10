@@ -1,4 +1,4 @@
-export const ceasar = (str:string, shift=1):string => {
+export const caesar = (str:string, shift=1):string => {
   return str.split('').map(c => String.fromCharCode(97+(c.charCodeAt(0)-97+shift)%26)).join('') 
 }
 
