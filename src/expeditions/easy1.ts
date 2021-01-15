@@ -2,7 +2,7 @@ import { Expedition } from "../expedition";
 import { ExpeditionFactory } from "../expedition-factory";
 import { Node } from "../typings";
 import { em, parseCommand, toList } from "../utils";
-import { sampleData } from "./data";
+import { genHex, sampleData } from "./data";
 import { passwdGen } from "./data/files";
 import { remindTime } from "./functions/auto_commands";
 import { alphanumChecksum, caesar } from "./functions/ciphers";
@@ -27,7 +27,7 @@ create:(variables) => {
       files:{
         foo:sampleData.passwords.fakeWords.random(),
         'key.previous':key_old.join('\n'),
-        'generator.signed':toList(example_commands.map(e=>[e, '>', sign(e,key_old)])),
+        'generator.signed':toList(example_commands.map(e=>[e, sign(e,key_old)])),
       },
     },
     locked: {
@@ -51,7 +51,7 @@ create:(variables) => {
   const endDate = new Date()
   endDate.setMinutes(endDate.getMinutes() + 60)
   const exp = new Expedition({
-      nodes,
+      nodes: Object.entries(nodes),
       endDate,
       startNode: () => 'access-point',
       variables: new Map([['firewall','enable'], ...variables]),

@@ -49,7 +49,7 @@ function create(variables: Map<string, string | number | boolean>): Expedition {
   const endDate = new Date()
   endDate.setMinutes(endDate.getMinutes() + 60)
   const exp = new Expedition({
-      nodes,
+      nodes: Object.entries(nodes),
       setters: {
         completed: (ctx: Context, arg?: string) => {
           ctx.expedition.variables.set('complete', (arg === 'true'))
