@@ -22,7 +22,8 @@ export function timeLeft(date: Date): string {
   return timeFormat(Math.floor(diff/1000))
 }
 
-export function parseCommand(input: string): {cmd: string, rest?: string, lines: string[], argv: string[], input: string} {
+export function parseCommand(input?: string): {cmd?: string, rest?: string, lines?: string[], argv?: string[], input?: string} {
+  if(!input) return { cmd: undefined, rest: undefined, lines: undefined, argv: undefined, input: undefined }
   const spaces = input.indexOf(' ')
   const newLine = input.indexOf('\n')
   const index = (spaces >= 0 && newLine >= 0) ? Math.min(spaces, newLine) : Math.max(spaces, newLine)

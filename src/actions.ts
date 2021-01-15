@@ -12,7 +12,8 @@ function isAvailable(ctx: Context, cmd: Command|AsyncCommand, cmdName: string): 
   return !cmdName.startsWith('_') && (!cmd.isAvailable || cmd.isAvailable?.(ctx))
 }
 
-function getAvailable(ctx: Context, cmdName: string): Command | AsyncCommand | undefined {
+function getAvailable(ctx: Context, cmdName?: string): Command | AsyncCommand | undefined {
+  if(!cmdName) return undefined
   let cmd = ctx.expedition.commands.get(cmdName)
   if( cmd && isAvailable(ctx, cmd, cmdName) ) return cmd
   cmd = commands.get(cmdName)
