@@ -24,16 +24,16 @@ const locked = (
 ): ExpeditionModule => ({
   nodes: [[name, {...node,
     welcome: (ctx) => {
-      if(ctx.expedition.variables.get(name+'-unlock')) return welcome
-      ctx.player.input = name+'-unlock'
+      if(ctx.expedition.variables.get('_unlock-'+name)) return welcome
+      ctx.player.input = '_unlock-'+name
       throw new Error(locked)
     },
   }]],
-  commands: new Map([[name+'-unlock',{
+  commands: new Map([['_unlock-'+name,{
     run:(ctx, args) => {
       if(args != secret) throw new Error(fail ? fail : locked)
-      ctx.player.nodes.push(name)
-      ctx.expedition.variables.set(name+'-unlock', true)
+      if(ctx.player.currentNodeName != name) ctx.player.nodes.push(name)
+      ctx.expedition.variables.set('_unlock-'+name, true)
       return unlock ? unlock : welcome
     },
     help: () => (prompt),

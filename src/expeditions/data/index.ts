@@ -1,4 +1,4 @@
-import { files } from "./files"
+import { logs, passwdGen } from "./files"
 import { fakeWords, fakeWordsLong } from "./passwords"
 import { userNames } from "./users";
 
@@ -21,8 +21,8 @@ export class SampleData<T> extends Array<T> {
   static from<T>(arr: Iterable<T> | ArrayLike<T>):SampleData<T> { return new SampleData(...Array.from(arr)) }
 }
 
-export const sampleData = {
-  logs: SampleData.from(files.logs),
+export const data = {
   passwords: {fakeWords:new SampleData(...fakeWords), fakeWordsLong: new SampleData(...fakeWordsLong)},
-  users: SampleData.from(userNames)
+  users: SampleData.from(userNames),
+  files: {logs: SampleData.from(logs), passwdGen},
 }

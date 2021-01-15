@@ -1,5 +1,5 @@
 import { Expedition } from "../expedition";
-import { Context, Node } from "../typings";
+import { Node } from "../typings";
 import { remindTime } from "./functions/auto_commands";
 import { doc } from "./nodes/doc";
 import { locked } from "./nodes/locked";
@@ -14,14 +14,7 @@ const nodes: {[idx: string]: Node} = {
 function create(): Expedition {
   const endDate = new Date()
   endDate.setSeconds(endDate.getSeconds() + 10)
-  const exp = new Expedition({
-    nodes: Object.entries(nodes), endDate, setters: {
-      foo: (ctx: Context, arg?: string) => {
-        ctx.expedition.variables.set('foo', Number(arg))
-        console.log(ctx.expedition.variables)
-        return ''
-      }
-    }})
+  const exp = new Expedition({nodes: Object.entries(nodes), endDate})
     exp.nodes
       .set('doc2', doc('Welcome',{'name': 'content'}))
       .set('doc3', doc('Welcome',{'name': 'content'}))
