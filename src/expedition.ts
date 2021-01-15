@@ -17,8 +17,8 @@ export class Expedition {
   constructor(
     {type, nodes, setters, startNode, endCondition, endDate, variables} : {
       type?: string,
-      nodes?: [string, Node][], 
-      setters?: { [id: string]: Runnable },
+      nodes?: [string, Node][],
+      setters?: [string, Runnable][],
       startNode?: (player: Player) => string,
       endCondition?: string,
       endDate?: Date,
@@ -28,7 +28,7 @@ export class Expedition {
     this.type = (type) ? type : ''
     this.players = [];
     this.nodes = new Map(nodes)
-    this.setters = setters ? new Map(Object.entries(setters)) : new Map()
+    this.setters = new Map(setters)
     this.variables = variables ? variables : new Map()
     this.startNode = (startNode) ? startNode : () => { return 'start'}
     this.commands = new Map()

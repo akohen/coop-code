@@ -1,6 +1,6 @@
 import { Expedition } from "../expedition";
 import { ExpeditionFactory } from "../expedition-factory";
-import { Context, Node } from "../typings";
+import { Context, Node, Runnable } from "../typings";
 import { em } from "../utils";
 import { useless } from "./data/files"
 import { lockCmd, lockWelcome } from "./functions/generic-lock";
@@ -46,16 +46,16 @@ This will show all the systems you are currently connected to, and which ones ca
 
 
 function create(variables: Map<string, string | number | boolean>): Expedition {
+  const setters:[string,Runnable][] = [['completed', 
+  (ctx: Context, arg?: string) => {
+    ctx.expedition.variables.set('complete', (arg === 'true'))
+    return `Set completed to ${em((arg === 'true').toString())}`
+  }]]
   const endDate = new Date()
   endDate.setMinutes(endDate.getMinutes() + 60)
   const exp = new Expedition({
       nodes: Object.entries(nodes),
-      setters: {
-        completed: (ctx: Context, arg?: string) => {
-          ctx.expedition.variables.set('complete', (arg === 'true'))
-          return `Set completed to ${em((arg === 'true').toString())}`
-        },
-      },
+      setters,
       endDate,
       variables
   })
