@@ -14,25 +14,31 @@ export class Expedition {
   endDate?: Date
   lastUpdated: Date
 
-  constructor(
-    {type, nodes, setters, startNode, endCondition, endDate, variables} : {
-      type?: string,
-      nodes?: [string, Node][],
-      setters?: [string, Runnable][],
-      startNode?: (player: Player) => string,
-      endCondition?: string,
-      endDate?: Date,
-      variables?: Map<string,string | number | boolean>,
-    } = {}
-  ) {
-    this.type = (type) ? type : ''
+  constructor({
+    type = 'unknown',
+    nodes,
+    setters,
+    startNode = () => { return 'start'},
+    endCondition = 'complete',
+    endDate,
+    variables = new Map()
+  } : {
+    type?: string,
+    nodes?: [string, Node][],
+    setters?: [string, Runnable][],
+    startNode?: (player: Player) => string,
+    endCondition?: string,
+    endDate?: Date,
+    variables?: Map<string,string | number | boolean>,
+  } = {}) {
+    this.type = type
     this.players = [];
     this.nodes = new Map(nodes)
     this.setters = new Map(setters)
-    this.variables = variables ? variables : new Map()
-    this.startNode = (startNode) ? startNode : () => { return 'start'}
+    this.variables = variables
+    this.startNode = startNode
     this.commands = new Map()
-    this.endCondition = endCondition ? endCondition : 'complete'
+    this.endCondition = endCondition
     this.endDate = endDate
     this.lastUpdated = new Date()
   }

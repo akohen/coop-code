@@ -32,7 +32,10 @@ export class ExpeditionFactory {
     const seed = varMap.get('_seed')?.toString()
     seedrandom(seed, { global: true })
     const expedition = this._create(varMap)
-    expedition.type = this.type
+    
+    // This is done here instead of inside the create function to ensure consistency
+    // as this prevents having different values between creation and factory indexing
+    expedition.type = this.type 
     if(id) expedition.id = id
     if(players) expedition.players = players
     if(last_updated) expedition.lastUpdated = last_updated
