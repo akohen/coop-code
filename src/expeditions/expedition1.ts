@@ -15,7 +15,7 @@ function create(): Expedition {
   const endDate = new Date()
   endDate.setSeconds(endDate.getSeconds() + 10)
   const exp = new Expedition({
-    nodes, endDate, setters: {
+    nodes: Object.entries(nodes), endDate, setters: {
       foo: (ctx: Context, arg?: string) => {
         ctx.expedition.variables.set('foo', Number(arg))
         console.log(ctx.expedition.variables)

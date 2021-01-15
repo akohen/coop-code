@@ -16,7 +16,7 @@ describe("Expedition", () => {
     };
     
     const player = new Player('bob')
-    const expedition = new Expedition({nodes}).addPlayer(player)
+    const expedition = new Expedition({nodes: Object.entries(nodes)}).addPlayer(player)
     ctx = {player, expedition, backend:memory}
   })
 
