@@ -19,6 +19,9 @@ var game = {
           term.set_prompt(e.data.prompt);
         }
       }
+      if(e.data.expedition.state.autocomplete) {
+        game.completion = e.data.expedition.state.autocomplete
+      }
     }).fail(e => {
       term.echo(`[[;red;]${e.responseJSON.errors}]`)
       term.resume()
@@ -30,10 +33,12 @@ var game = {
     greetings: function(callback) {callback("Welcome")},
     onBlur: function() { return false },
     exit: false,
+    completion: function(s, e) { return e(game.completion)},
   },
   setPrompt: function(e) {
     e('login>')
   },
+  completion: [],
 }
 
 jQuery(document).ready(function($) {

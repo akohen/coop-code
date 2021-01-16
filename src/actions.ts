@@ -80,6 +80,15 @@ function getState(ctx: Context): unknown {
   return {
     player: ctx.player.currentNode,
     status: ctx.expedition.status,
+    autocomplete:[
+      'create', 'join', 'history',
+      ...Array.from(available(ctx).keys()),
+      ...Array.from( ctx.expedition.nodes ).map(([nodeName, node]) => { 
+        if(!node.isAvailable || node.isAvailable(ctx))
+          return nodeName
+      }).filter(e=>!!e),
+      ...(ctx.player.currentNode.files ? Object.keys(ctx.player.currentNode.files) : []),
+    ],
   }
 }
 

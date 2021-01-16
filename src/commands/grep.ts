@@ -5,7 +5,7 @@ export const grep:Command = {
   run: (ctx, args) => {
     if(!args) return grep.help?.(true)
     const command = parseCommand(args)
-    return command.rest?.split('\n').filter(e => e.includes(command.cmd||'')).join('\n')
+    return command.rest?.split('\n').filter(e => e.includes(command.cmd as string)).join('\n')
   },
   help: (long) => long ? 
   `grep command usage:
