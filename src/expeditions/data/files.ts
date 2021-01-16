@@ -1,5 +1,4 @@
 import { SampleData } from "."
-import { toList } from "../../utils"
 
 export const useless:{[name:string]:string}[] = [
   {'alternatives.log': `update-alternatives 2063-09-21 17:27:03: run with --install /usr/share/plymouth/themes/text.plymouth text.plymouth /usr/share/plymouth/themes/xtech2-text/xtech2-text.plymouth 50
