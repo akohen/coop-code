@@ -2,7 +2,7 @@ import { Expedition } from "../expedition";
 import { ExpeditionFactory } from "../expedition-factory";
 import { Node } from "../typings";
 import { em, parseCommand, toList } from "../utils";
-import { genHex, data } from "./data";
+import { genHex, data, SampleData } from "./data";
 import { remindTime } from "./functions/auto_commands";
 import { alphanumChecksum, caesar } from "./functions/ciphers";
 import { chat } from "./modules/chat";
@@ -10,19 +10,17 @@ import { locked } from "./nodes/locked";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
 create:(variables) => {
-  const [users, passwords] = [data.users.sample(20), data.passwords.fakeWords.sample(20)]
+  const logins = SampleData.createSet(20, data.users, data.passwords.fakeWords)
   const adminID = Math.floor(Math.random()*20)
-  users[adminID] = 'admin'
-  const exampleUsers = Array.from(users)
-  exampleUsers.splice(adminID,1)
+  logins[adminID][0] = 'admin'
   // Generate 8 words of 8 hex characters
   const key = [...Array(8)].map(()=>Math.floor(Math.random()*16**8).toString(16).padStart(8,'0'))
   const key_old = [...Array(8)].map(()=>Math.floor(Math.random()*16**8).toString(16).padStart(8,'0'))
   const sign = (word:string, key:string[]) => ([...Array(8)].map((_,i) => alphanumChecksum(key[i]+(word[i]||''))).join(''))
   const example_commands = ['restart', 'start', 'stop']
-  const logins = users.map((v,i) => [v, passwords[i]])
   const shift = Math.floor(Math.random()*25)+1
   const passwd = data.files.passwdGen(logins, e => caesar(e,shift))
+  const lastLogins = data.files.lastLogins(logins, 5)
   const nodes: [string,Node][] = [
     ['access-point', {
       welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${data.users.random()}`,
@@ -39,7 +37,7 @@ create:(variables) => {
         throw new Error('Access denied, enter admin password')
       },
     }],
-    ['logs', {files: {'last-logins':'foo', passwd}}],
+    ['logs', {files: {'last-logins':lastLogins, passwd}}],
     ['security', {}],
     ['foo', {
       isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
@@ -64,7 +62,7 @@ create:(variables) => {
       welcome:'welcome',
       prompt:'>',
       locked:'Access denied, enter admin password',
-      secret: passwords[adminID]
+      secret: logins[adminID][1]
     },{
       isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
     }))

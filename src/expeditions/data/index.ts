@@ -1,4 +1,4 @@
-import { logs, passwdGen } from "./files"
+import { logs, passwdGen, lastLogins } from "./files"
 import { fakeWords, fakeWordsLong } from "./passwords"
 import { userNames } from "./users";
 
@@ -19,10 +19,14 @@ export class SampleData<T> extends Array<T> {
   sample(len = 1):SampleData<T> { return new SampleData(...this.shuffled().slice(0,len)) }
   random():T { return this[Math.floor(Math.random()*this.length)] }
   static from<T>(arr: Iterable<T> | ArrayLike<T>):SampleData<T> { return new SampleData(...Array.from(arr)) }
+  static createSet<T>(samples:number, data:SampleData<T>, ...rest:SampleData<T>[]): SampleData<T[]> {
+    const a = [data, ...rest].map(d => d.sample(samples))
+    return SampleData.from(a[0].map((_,i) => a.map(x => x[i])))
+  }
 }
 
 export const data = {
   passwords: {fakeWords:new SampleData(...fakeWords), fakeWordsLong: new SampleData(...fakeWordsLong)},
   users: SampleData.from(userNames),
-  files: {logs: SampleData.from(logs), passwdGen},
+  files: {logs: SampleData.from(logs), passwdGen, lastLogins},
 }

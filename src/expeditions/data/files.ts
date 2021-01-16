@@ -1,3 +1,6 @@
+import { SampleData } from "."
+import { toList } from "../../utils"
+
 export const useless:{[name:string]:string}[] = [
   {'alternatives.log': `update-alternatives 2063-09-21 17:27:03: run with --install /usr/share/plymouth/themes/text.plymouth text.plymouth /usr/share/plymouth/themes/xtech2-text/xtech2-text.plymouth 50
 update-alternatives 2063-10-19 16:43:49: run with --install /usr/bin/fakeroot fakeroot /usr/bin/fakeroot-sysv 50 --slave /usr/share/man/man1/fakeroot.1.gz fakeroot.1.gz /usr/share/man/man1/fakeroot-sysv.1.gz
@@ -36,5 +39,17 @@ export function passwdGen(users:string[][], cipher:(str:string) => string=e=>e):
   return users.map((u,i) => (
     `${u[0]}:${cipher(u[1])}:10${(i+2).toString().padStart(2,'0')}:${(u[0] == 'admin') ? '1001:System Administrator' : '1101:User'}:/home/${u[0].toLowerCase()}`
     )).join('\n')
+}
+
+export const lastLogins = (logins:SampleData<string[]>, count = 5, date = 2.96e12):string => {
+  return logins
+    .sample(count)
+    .map(
+      (e,i) => e[0] != 'admin' ? 
+        `[${new Date(date + i*2500 + Math.random()*2500).toISOString()}] ${e[0]} logged in with password ${e[1]}`
+        : undefined
+      )
+    .filter(e => e)
+    .join('\n')
 }
 export const files = {useless, logs}
