@@ -30,6 +30,22 @@ create:(variables) => {
         'generator.signed':toList(example_commands.map(e=>[e, sign(e,key_old)])),
       },
     }],
+    [`documentation`,{files:{
+      'charshift-encryption':'',
+      'alphanum-checksum': `This technique is used to guarantee the integrity of a file, or a request.
+This checksum always takes an input string and returns a single alphanumeric character.
+
+To compute a checksum, we first define the ${em('valid characters sequence')} as the numbers between 0 and 9, in increasing order, followed by the 26 letters of the alphabet, in lowercase, in alphabetic order.
+All other characters are ignored.
+
+In order to compute the checksum of a string, we start by defining the checksum of a valid character as itself.
+Each subsequent character of the input string moves the checksum result along the ${em('valid characters sequence')} according to that character value in that sequence.
+If we reach the end of the sequence, we restart at 0.
+
+For example:
+  - the checksum of ${em('101')} is ${em('2')}. (we start with 1, 0 has no effect, and 1 increases the result by 1)
+  - the checksum of ${em('ez')} is ${em('d')}`,
+    },}],
     [`rand-${genHex(4)}`,{}],
     ['locked', {
       welcome:(ctx) => {
