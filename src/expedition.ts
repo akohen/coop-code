@@ -55,7 +55,7 @@ export class Expedition {
     return this
   }
 
-  addModule({nodes, variables, commands}:ExpeditionModule): Expedition {
+  addModule({nodes, variables, commands, setters}:ExpeditionModule): Expedition {
     for (const [name, node] of nodes || []) {
       this.nodes.set(name, node)
     }
@@ -64,6 +64,9 @@ export class Expedition {
     }
     if (commands != undefined) {
       this.commands = new Map([...this.commands, ...commands])
+    }
+    if (setters != undefined) {
+      this.setters = new Map([...this.setters, ...setters])
     }
     return this
   }

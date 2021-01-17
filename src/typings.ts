@@ -12,6 +12,7 @@ export interface ExpeditionModule {
   nodes?: Array<[string,Node]>,
   variables?: Map<string, string|number|boolean>
   commands?: Map<string,Command>
+  setters?: Map<string,Runnable>
 }
 
 export type Runnable = (ctx: Context, args?: string) => string | undefined;
