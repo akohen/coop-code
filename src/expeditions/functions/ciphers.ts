@@ -18,7 +18,8 @@ export const basicChecksum = (name: string): string =>
   String.fromCharCode([...name.toLowerCase()].reduce((a,c) => (a+c.charCodeAt(0)-97)%26,0)+97)
 
 export const alphanumChecksum = (name: string): string => 
-  alphanum[[...name].reduce((a,c) => alphanum.includes(c) ? (a+alphanum.indexOf(c))%alphanum.length : a,0)]
+  alphanum[[...name]
+    .reduce((a,c) => alphanum.includes(c) ? (a+alphanum.indexOf(c))%alphanum.length : a,0)]
 
 export const hexChecksum = (name: string): string => 
   [...name]

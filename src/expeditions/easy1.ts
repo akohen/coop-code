@@ -34,19 +34,20 @@ create:(variables) => {
   // Base nodes layout
   const nodes: [string,Node][] = [
     ['access-point', {
-      welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${data.users.random()}`,
-      files:{
-        foo:data.passwords.fakeWords.random(),
-      },
+      welcome:() => `Welcome to this expedition.\nYour goal is to restart this ship's main generator before the battery runs out of power, in 1 hour`,
     }],
     [`documentation`,{files:{
-      'charshift-encryption':'',
+      'charshift-encryption': data.files.documentation["charshift"],
       'alphanum-checksum': data.files.documentation["alphanum-checksum"],
+      'power-mgmt': '<TODO>',
+      'firewall': '<TODO>',
       },
       tags: ['doc'],
     }],
     [`rand-${genHex(4)}`,{}],
-    ['logs', {files: {'logins.log.3':lastLogins, passwd}}],
+    [`rand-${genHex(4)}`,{}],
+    [`secure-${genHex(4)}`, {files: {passwd}}],
+    [`trash-${genHex(4)}`, {files: {'logins.log.3':lastLogins}}],
     ['security', {}],
     ['engineering', { // Controls to the generator, accessible after disabling the firewall
       isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
@@ -64,16 +65,17 @@ create:(variables) => {
   })
   exp
     .addModule(chat)
-    .addModule(locked('caesar',{
+    .addModule(locked(`firewall-control`,{
       welcome:'welcome',
       prompt:'>',
       locked:'Access denied, enter admin password',
       fail: 'Authentication failed: incorrect password',
       secret: logins[adminID][1]
     },{
-      isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
+      // isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
+      tags: ['firewall'],
     }))
-    .addModule(locked('sample-data',{
+    .addModule(locked(`data-${genHex(4)}`,{
       welcome:'This system is used to store previous keys and examples of encrypted data, intended for testing only, not production use!',
       prompt: sequence.join(' ') + '?>',
       locked:'Access denied, complete sequence to unlock',
@@ -83,7 +85,7 @@ create:(variables) => {
       files:{
         'key.previous': key_old.join('\n'),
         'generator.signed': toList(example_commands.map(e=>[e, sign(e,key_old)])),
-        'charshift.test': caesar('abcdefghijklmnopqrstuvwxyz ykhmsnvzk technique',shift),
+        'charshift.test': caesar('<TODO>', shift),
       },
     }))
   .commands

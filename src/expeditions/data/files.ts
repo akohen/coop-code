@@ -19,7 +19,7 @@ update-alternatives 2063-10-19 16:43:51: run with --quiet --install /usr/bin/cc 
 ]
 
 export const documentation = {
-  'alphanum-checksum': `This technique is used to guarantee the integrity of a file, or a request.
+  'alphanum-checksum': `This algorithm is used to guarantee the integrity of a file, or a request.
 This checksum always takes an input string and returns a single alphanumeric character.
 
 To compute a checksum, we first define the ${em('valid characters sequence')} as the numbers between 0 and 9, in increasing order, followed by the 26 letters of the alphabet, in lowercase, in alphabetic order.
@@ -32,6 +32,19 @@ If we reach the end of the sequence, we restart at 0.
 For example:
 - the checksum of ${em('101')} is ${em('2')}. (we start with 1, 0 has no effect, and 1 increases the result by 1)
 - the checksum of ${em('ez')} is ${em('d')}`,
+  'charshift': `This algorithm is used to encrypt low security text documents.
+
+In order to encrypt a string, we first define the ${em('valid characters sequence')} as the 26 lowercase letters in alphabetical order.
+All other characters are ignored.
+
+We then select a ${em('key')}, which must be an ${em('integer between 1 and 25')}.
+Each valid character is then replaced by the character which is as many positions down the ${em('valid characters sequence')} as the value of the ${em('key')}.
+If we reach the end of the sequence, we loop back and continue from the start.
+
+For example:
+- Using a key of ${em('5')}, the string ${em('hello world')} is encrypted as ${em('mjqqt btwqi')}
+
+To decode a message, we use the same algorithm, but using the opposite value of the encryption key (eg. -5 if the key was 5)`,
 }
 
 export function passwdGen(users:string[][], cipher:(str:string) => string=e=>e):string {
