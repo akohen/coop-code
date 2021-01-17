@@ -65,7 +65,7 @@ create:(variables) => {
   })
   exp
     .addModule(chat)
-    .addModule(debug_mode({
+    .addModule(debug_mode('swordfish', {
       welcome:(ctx) => `Expedition seed: ${ctx.expedition.variables.get('_seed')}\nadmin: ${logins[adminID]}\nSequence: ${sequenceSecret}\nCaesar shift: ${shift}`,
     }))
     .addModule(locked(`firewall-control`,{
