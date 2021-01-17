@@ -5,7 +5,7 @@ export type appResponse = {
   errors?: string,
   output?: string,
   prompt?: string,
-  expedition?: unknown
+  autocomplete?: string[]
 }
 
 export interface ExpeditionModule {

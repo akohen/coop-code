@@ -19,8 +19,8 @@ var game = {
           term.set_prompt(e.data.prompt);
         }
       }
-      if(e.data.expedition.state.autocomplete) {
-        game.completion = e.data.expedition.state.autocomplete
+      if(e.data.autocomplete) {
+        game.completion = e.data.autocomplete
       }
     }).fail(e => {
       term.echo(`[[;red;]${e.responseJSON.errors}]`)

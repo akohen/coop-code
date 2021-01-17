@@ -72,15 +72,12 @@ async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
     errors,
     output,
     prompt: ctx.player.prompt,
-    expedition: {state:getState(ctx), path: ctx.player.nodes}
+    autocomplete: getAutocomplete(ctx),
   }
 }
 
-function getState(ctx: Context): unknown {
-  return {
-    player: ctx.player.currentNode,
-    status: ctx.expedition.status,
-    autocomplete:[
+function getAutocomplete(ctx: Context): string[] {
+  return [
       'create', 'join', 'history',
       ...Array.from(available(ctx).keys()),
       ...Array.from( ctx.expedition.nodes ).map(([nodeName, node]) => { 
@@ -88,8 +85,7 @@ function getState(ctx: Context): unknown {
           return nodeName
       }).filter(e=>!!e),
       ...(ctx.player.currentNode.files ? Object.keys(ctx.player.currentNode.files) : []),
-    ],
-  }
+    ] as string[]
 }
 
-export { execute, getState, available, getAvailable }
+export { execute, available, getAvailable }
