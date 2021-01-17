@@ -1,9 +1,9 @@
-import { logs, passwdGen, lastLogins } from "./files"
+import { files, passwdGen, lastLogins } from "./files"
 import { fakeWords, fakeWordsLong } from "./passwords"
 import { userNames } from "./users";
 
 export const alphanum = '0123456789abcdefghikljmnopqrstuvwxyz'
-export const alpha = 'abcdefghikljmnopqrstuvwxyz'
+export const alpha = 'abcdefghijklmnopqrstuvwxyz'
 export const hex = '0123456789abcdef'
 export const genHex = (size:number):string => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
 
@@ -28,5 +28,5 @@ export class SampleData<T> extends Array<T> {
 export const data = {
   passwords: {fakeWords:new SampleData(...fakeWords), fakeWordsLong: new SampleData(...fakeWordsLong)},
   users: SampleData.from(userNames),
-  files: {logs: SampleData.from(logs), passwdGen, lastLogins},
+  files: {logs: SampleData.from(files.useless), passwdGen, lastLogins, documentation: files.documentation},
 }

@@ -4,60 +4,50 @@ import { Node } from "../typings";
 import { em, parseCommand, toList } from "../utils";
 import { genHex, data, SampleData } from "./data";
 import { remindTime } from "./functions/auto_commands";
-import { alphanumChecksum, caesar } from "./functions/ciphers";
+import { alphanumChecksum, caesar, sequenceFromLast } from "./functions/ciphers";
 import { chat } from "./modules/chat";
 import { locked } from "./nodes/locked";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
 create:(variables) => {
+  // Populate users, add admin account
   const logins = SampleData.createSet(20, data.users, data.passwords.fakeWords)
   const adminID = Math.floor(Math.random()*20)
   logins[adminID][0] = 'admin'
-  // Generate 8 words of 8 hex characters
+
+  // Generate 2 keys (8 words of 8 hex characters) and signing function
   const key = [...Array(8)].map(()=>Math.floor(Math.random()*16**8).toString(16).padStart(8,'0'))
   const key_old = [...Array(8)].map(()=>Math.floor(Math.random()*16**8).toString(16).padStart(8,'0'))
   const sign = (word:string, key:string[]) => ([...Array(8)].map((_,i) => alphanumChecksum(key[i]+(word[i]||''))).join(''))
   const example_commands = ['restart', 'start', 'stop']
+
+  // Caesar encrypted passwords
   const shift = Math.floor(Math.random()*25)+1
   const passwd = data.files.passwdGen(logins, e => caesar(e,shift))
   const lastLogins = data.files.lastLogins(logins, 5)
+
+  // Generating a sequence of number ('for find the next'-type locks)
+  const sequenceStep = Math.floor(Math.random()*3) + 1
+  const sequence = sequenceFromLast((x) => 2*x-sequenceStep, 5, 7)
+  const sequenceSecret = sequence.pop() as number
+  
+  // Base nodes layout
   const nodes: [string,Node][] = [
     ['access-point', {
       welcome:() => `Welcome to this expedition. TODO ${Math.random()}\nSample user:${data.users.random()}`,
       files:{
         foo:data.passwords.fakeWords.random(),
-        'key.previous':key_old.join('\n'),
-        'generator.signed':toList(example_commands.map(e=>[e, sign(e,key_old)])),
       },
     }],
     [`documentation`,{files:{
       'charshift-encryption':'',
-      'alphanum-checksum': `This technique is used to guarantee the integrity of a file, or a request.
-This checksum always takes an input string and returns a single alphanumeric character.
-
-To compute a checksum, we first define the ${em('valid characters sequence')} as the numbers between 0 and 9, in increasing order, followed by the 26 letters of the alphabet, in lowercase, in alphabetic order.
-All other characters are ignored.
-
-In order to compute the checksum of a string, we start by defining the checksum of a valid character as itself.
-Each subsequent character of the input string moves the checksum result along the ${em('valid characters sequence')} according to that character value in that sequence.
-If we reach the end of the sequence, we restart at 0.
-
-For example:
-  - the checksum of ${em('101')} is ${em('2')}. (we start with 1, 0 has no effect, and 1 increases the result by 1)
-  - the checksum of ${em('ez')} is ${em('d')}`,
-    },}],
-    [`rand-${genHex(4)}`,{}],
-    ['locked', {
-      welcome:(ctx) => {
-        ctx.player.input = '_unlock-caesar'
-        throw new Error('Access denied, enter admin password')
+      'alphanum-checksum': data.files.documentation["alphanum-checksum"],
       },
+      tags: ['doc'],
     }],
-    ['logs', {files: {'last-logins':lastLogins, passwd}}],
+    [`rand-${genHex(4)}`,{}],
+    ['logs', {files: {'logins.log.3':lastLogins, passwd}}],
     ['security', {}],
-    ['foo', {
-      isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
-    }],
     ['engineering', { // Controls to the generator, accessible after disabling the firewall
       isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
       tags: ['generator'],
@@ -78,9 +68,23 @@ For example:
       welcome:'welcome',
       prompt:'>',
       locked:'Access denied, enter admin password',
+      fail: 'Authentication failed: incorrect password',
       secret: logins[adminID][1]
     },{
       isAvailable: (ctx) => (ctx.expedition.variables.get('firewall') == 'disable'),
+    }))
+    .addModule(locked('sample-data',{
+      welcome:'This system is used to store previous keys and examples of encrypted data, intended for testing only, not production use!',
+      prompt: sequence.join(' ') + '?>',
+      locked:'Access denied, complete sequence to unlock',
+      fail: 'Authentication failed: incorrect password',
+      secret: sequenceSecret.toString(),
+    },{
+      files:{
+        'key.previous': key_old.join('\n'),
+        'generator.signed': toList(example_commands.map(e=>[e, sign(e,key_old)])),
+        'charshift.test': caesar('abcdefghijklmnopqrstuvwxyz ykhmsnvzk technique',shift),
+      },
     }))
   .commands
     .set('_auto_remindtime', remindTime)
@@ -90,7 +94,7 @@ For example:
         ctx.expedition.variables.set('firewall',args)
         return `Firewall ${em(args+'d')}`
       },
-      isAvailable: (ctx) => (ctx.player.currentNodeName == 'security')
+      isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('firewall') || false)
     })
     .set('generator',{
       run: (ctx, args) => {

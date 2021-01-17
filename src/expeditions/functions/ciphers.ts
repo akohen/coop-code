@@ -25,3 +25,15 @@ export const hexChecksum = (name: string): string =>
     .reduce((a,c) => alphanum.includes(c) ? (a+alphanum.indexOf(c))%256 : a,0)
     .toString(16)
     .padStart(2,'0')
+
+export const sequenceGen = (gen:(start:number, i:number) => number, start = 1, len = 5): number[] => {
+  return Array(len).fill(start).map(gen)
+}
+
+export const sequenceFromLast = (gen:(prev:number) => number, start = 1, len = 5): number[] => {
+  const result = [start]
+  while(result.length < len) {
+    result.push(gen(result[result.length-1]))
+  }
+  return result
+}
