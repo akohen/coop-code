@@ -1,7 +1,9 @@
-import { alphanum } from "../data"
+import { alphanum, alpha } from "../data"
 
 export const caesar = (str:string, shift=1):string => {
-  return str.split('').map(c => String.fromCharCode(97+(c.charCodeAt(0)-97+shift)%26)).join('') 
+  return [...str.toLowerCase()]
+    .map(c => alpha.includes(c) ? alpha[(alpha.length + shift + alpha.indexOf(c))%alpha.length]: c)
+    .join('') 
 }
 
 export const permutation = (str:string, permutation:string[]):string => {
