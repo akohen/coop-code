@@ -6,6 +6,7 @@ import { genHex, data, SampleData } from "./data";
 import { remindTime } from "./functions/auto_commands";
 import { alphanumChecksum, caesar, sequenceFromLast } from "./functions/ciphers";
 import { chat } from "./modules/chat";
+import { debug_mode } from "./modules/debug";
 import { locked } from "./nodes/locked";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
@@ -45,7 +46,6 @@ create:(variables) => {
       tags: ['doc'],
     }],
     [`rand-${genHex(4)}`,{}],
-    [`rand-${genHex(4)}`,{}],
     [`secure-${genHex(4)}`, {files: {passwd}}],
     [`trash-${genHex(4)}`, {files: {'logins.log.3':lastLogins}}],
     ['security', {}],
@@ -65,6 +65,9 @@ create:(variables) => {
   })
   exp
     .addModule(chat)
+    .addModule(debug_mode({
+      welcome:(ctx) => `Expedition seed: ${ctx.expedition.variables.get('_seed')}\nadmin: ${logins[adminID]}\nSequence: ${sequenceSecret}\nCaesar shift: ${shift}`,
+    }))
     .addModule(locked(`firewall-control`,{
       welcome:'welcome',
       prompt:'>',
