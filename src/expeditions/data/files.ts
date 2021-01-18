@@ -32,6 +32,8 @@ If we reach the end of the sequence, we restart at 0.
 For example:
 - the checksum of ${em('101')} is ${em('2')}. (we start with 1, 0 has no effect, and 1 increases the result by 1)
 - the checksum of ${em('ez')} is ${em('d')}`,
+
+
   'charshift': `This algorithm is used to encrypt low security text documents.
 
 In order to encrypt a string, we first define the ${em('valid characters sequence')} as the 26 lowercase letters in alphabetical order.
@@ -45,6 +47,13 @@ For example:
 - Using a key of ${em('5')}, the string ${em('hello world')} is encrypted as ${em('mjqqt btwqi')}
 
 To decode a message, we use the same algorithm, but using the opposite value of the encryption key (eg. -5 if the key was 5)`,
+
+  'ancss':`The ANCSS algorithm is used to sign short strings.
+
+Strings are signed using a ${em('private key')}, which is made up of 8 words of 8 hexadecimal characters each.
+
+The signature generated is always 8 characters long where the i-th character is the ${em('alphanumerical checksum')} of the i-th character of the input string and the i-th word of the key.
+If the input string is less than 8 characters, or if the string character is not an alphanumeric character, then that character is ignored`,
 }
 
 export function passwdGen(users:string[][], cipher:(str:string) => string=e=>e):string {
