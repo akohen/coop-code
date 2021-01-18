@@ -30,11 +30,11 @@ function create(): Expedition {
   exp
     .addModule(locked('locked1', 
       {welcome:'welcome', prompt:'Enter your access code>', secret:'secret', locked:'locked', unlock:'unlock', fail:'fail'},
-      {welcome: () => '', isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('branch1')||false)},
+      {welcome: () => '', isAvailable: (ctx) => !!ctx.player.currentNode.tags?.includes('branch1')},
       ))
     .addModule(locked('locked2', 
       {welcome:'welcome', prompt:'Enter your access code>', secret:'secret', locked:'locked', unlock:'unlock', fail:'fail'},
-      {welcome: () => '', isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('branch2')||false)},
+      {welcome: () => '', isAvailable: (ctx) => !!ctx.player.currentNode.tags?.includes('branch2')},
       ))
     .addModule(chat)
   return exp

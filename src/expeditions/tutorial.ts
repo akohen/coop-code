@@ -40,7 +40,7 @@ This will show all the systems you are currently connected to, and which ones ca
       welcome: lockedNodeWelcome,
       locked:`This system is password-protected, please enter the admin password`,
     }),
-    isAvailable: (ctx) => (ctx.player.currentNode.tags?.includes('hub')||false),
+    isAvailable: (ctx) => !!ctx.player.currentNode.tags?.includes('hub'),
   },
 };
 

@@ -56,7 +56,7 @@ export class Expedition {
   }
 
   addModule({nodes, variables, commands, setters}:ExpeditionModule): Expedition {
-    for (const [name, node] of nodes || []) {
+    for (const [name, node] of nodes ?? []) {
       this.nodes.set(name, node)
     }
     if (variables != undefined) {

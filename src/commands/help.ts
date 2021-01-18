@@ -6,7 +6,7 @@ export const help:Command = {
     if(args == undefined || args?.length == 0) {
       let result = 'Available commands:';
       for(const [cmdName, cmd] of available(ctx)) {
-        result += `\n  ${cmdName} ${cmd.help?.(false) || ''}`
+        result += `\n  ${cmdName} ${cmd.help?.(false) ?? ''}`
       }
       return result
     }
