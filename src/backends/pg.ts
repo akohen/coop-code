@@ -48,6 +48,10 @@ export const pg:Backend = {
     }
   },
 
+  async login(githubID) {
+    return undefined
+  },
+
   async createPlayer(name: string) {
     const player = new Player(name)
     try {

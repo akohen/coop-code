@@ -8,6 +8,9 @@ export class Player {
     expedition!: Expedition
     input?: string
     prevExpedition?: Expedition
+    id?: string
+    secret?: string
+    githubID?: number
   
     constructor(name: string) {
       this.name = name

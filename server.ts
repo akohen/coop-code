@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import game from './src/game';
-import { github } from './src/github';
+import { login, register } from './src/github';
 import { backend } from './src/backends';
 
 const app = express();
@@ -18,14 +18,15 @@ app.get('/', function (req, res) {
 
 app.post('/', async (req, res) => {
   try {
-    const result = await game(req.body['player'], req.body['cmd'], backend)
+    const result = await game(req.body['player'], req.body['secret'], req.body['cmd'], backend)
     res.status((result.errors) ? 400 : 200).json(result)
   } catch (error) {
     res.status(500).json(error.message)
   }
 });
 
-app.get('/oauth', github);
+app.get('/oauth', login);
+app.get('/oauth/register/:username', register);
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);

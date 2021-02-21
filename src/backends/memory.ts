@@ -7,13 +7,25 @@ const expeditions:Map<string,Expedition> = new Map()
 const players:Map<string,Player> = new Map()
 
 export const memory:Backend = {
-  getPlayer(player: string): Promise<Player | undefined> {
-    return Promise.resolve(players.get(player))
+  getPlayer(id: string, secret: string): Promise<Player | undefined> {
+    const player = players.get(id)
+    if(player?.secret == secret) return Promise.resolve(player)
+    return Promise.resolve(undefined)
   },
 
-  createPlayer(name: string): Promise<Player> {
+  login(githubID) {
+    for(const player of players.values()) {
+      if(player.githubID == githubID) return Promise.resolve(player)
+    }
+    return Promise.resolve(undefined)
+  },
+
+  createPlayer(name: string, githubID?: number): Promise<Player> {
     const player = new Player(name)
-    players.set(name, player)
+    player.id = Math.random().toString(36).substring(7)
+    player.secret = Math.random().toString(36).substring(7)
+    player.githubID = githubID // Multiple users with the same ID allowed for easier testing
+    players.set(player.id, player)
     return Promise.resolve(player)
   },
 
@@ -37,7 +49,3 @@ export const memory:Backend = {
     return Promise.resolve()
   }
 }
-
-const bob = new Player('bob')
-players.set('foo', new Player('foo'))
-players.set('bob', bob)
