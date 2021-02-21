@@ -37,9 +37,9 @@ export type AsyncCommand = {
 }
 
 export interface Backend {
-  getPlayer:        (id: string, secret: string) => Promise<Player | undefined>,
-  login:            (githubID: number) => Promise<Player | undefined>,
-  createPlayer:     (name: string, githubID?: number) => Promise<Player>,
+  getPlayer:        (id: string, secret: string)      => Promise<Player | undefined>,
+  login:            (githubID: number)                => Promise<Player | undefined>,
+  createPlayer:     (name: string, githubID?: number) => Promise<Player | undefined>,
   getExpedition:    (name: string) => Promise<Expedition | undefined>,
   listExpeditions:  (player?: string) => Promise<Array<Expedition>>,
   createExpedition: (exp: Expedition, id?: string) => Promise<Expedition>,

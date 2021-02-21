@@ -6,7 +6,7 @@ var game = {
     if(cmd.name == 'login') {
       localStorage.removeItem('player_id')
       localStorage.removeItem('player_secret')
-      const popup = window.open('https://github.com/login/oauth/authorize?client_id=450a5ae4c4d33ebb6477&redirect_uri=http://localhost:8001/oauth')
+      window.open('https://github.com/login/oauth/authorize?client_id='+game.config.github_client_id+'&redirect_uri='+game.config.github_redirect_uri)
       term.echo('Logging in...')
       term.pause()
       return
@@ -18,7 +18,7 @@ var game = {
     } else if(cmd.name == 'register') {
       if(!cmd.args[0]) return 'Select your username with [[;white;]register USERNAME]'
       if(!/^[A-Za-z0-9_-]+$/.test(cmd.args[0])) return 'Invalid username. Please use only alphanumeric characters'
-      const popup = window.open('https://github.com/login/oauth/authorize?client_id=450a5ae4c4d33ebb6477&redirect_uri=http://localhost:8001/oauth/register/'+cmd.args[0])
+      window.open('https://github.com/login/oauth/authorize?client_id='+game.config.github_client_id+'&redirect_uri='+game.config.github_redirect_uri+'/register/'+cmd.args[0])
       term.echo('User registration in progress...')
       term.pause()
       return
@@ -56,6 +56,7 @@ var game = {
 
 jQuery(document).ready(function($) {
   $('#console').terminal(game.interpreter, game.options)
+  $.get('/config').then(d => game.config = d)
   game.term = $('#console').terminal()
   game.term.focus()
   if(localStorage.getItem('player_id')) {
@@ -69,13 +70,10 @@ jQuery(document).ready(function($) {
 
 
 window.loginCallback = function (err) {
-  if(err) {
-    game.term.echo(`[[;red;]${err}]`)
-    game.term.resume()
-    return
+  if(err) game.term.echo(`[[;red;]${err}]`)
+  if(localStorage.getItem('player_id') && localStorage.getItem('player_secret')) {
+    game.term.set_prompt('')
+    game.term.exec('')
   }
-  game.player = localStorage.getItem('player_id')
-  game.term.set_prompt('')
-  game.term.exec('')
   game.term.resume()
 }

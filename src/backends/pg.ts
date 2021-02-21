@@ -25,9 +25,12 @@ const restoreExpedition = (data:{type: string, variables:string, expedition_id:s
 }
 
 export const pg:Backend = {
-  async getPlayer(name: string) {
+  async getPlayer(id: string, secret: string) {
     try {
-      const { rows:[playerData] } = await pool.query('SELECT * FROM players LEFT JOIN expeditions USING(expedition_id) WHERE name=$1 LIMIT 1', [name])
+      const { rows:[playerData] } = await pool.query(
+        'SELECT * FROM players LEFT JOIN expeditions USING(expedition_id) WHERE id=$1 and secret=$2 LIMIT 1',
+        [id, secret]
+      )
       if(!playerData) return
       const player = new Player(playerData.name)
     
@@ -44,21 +47,39 @@ export const pg:Backend = {
       return player
     } catch (error) {
       console.error(error.message)
-      throw new Error('Unable to get user')
+      return
     }
   },
 
   async login(githubID) {
-    return undefined
-  },
-
-  async createPlayer(name: string) {
-    const player = new Player(name)
     try {
-      const values = [player.name, player.nodes]
-      await pool.query('INSERT INTO players(name, nodes) VALUES($1, $2) RETURNING *', values)
+      const { rows:[playerData] } = await pool.query('SELECT * FROM players WHERE github=$1 LIMIT 1', [githubID])
+      if(!playerData) return
+      const player = new Player(playerData.name)
+      if(playerData.id) player.id = playerData.id
+      if(playerData.secret) player.secret = playerData.secret
       return player
     } catch (error) {
+      console.error(error.message)
+      return
+    }
+  },
+
+  async createPlayer(name: string, githubID?: number) {
+    try {
+      const player = new Player(name)
+      const values = [player.name, player.nodes, githubID]
+      const { rows:[playerData] } = await pool.query('INSERT INTO players(name, nodes, github) VALUES($1, $2, $3) RETURNING *', values)
+      
+      if(playerData.id) player.id = playerData.id
+      if(playerData.secret) player.secret = playerData.secret
+      return player
+    } catch (error) {
+      if(error.constraint == 'github_unique') {
+        const player = await pg.login(githubID as number)
+        if(player) player.githubID = -1
+        return player
+      }
       console.error(error.message)
       throw new Error('Unable to create user')
     }

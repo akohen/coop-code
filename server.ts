@@ -28,6 +28,14 @@ app.post('/', async (req, res) => {
 app.get('/oauth', login);
 app.get('/oauth/register/:username', register);
 
+app.get('/config', (req, res) => { // Temporary solution until this gets set during frontend build
+  res.set('Cache-control', 'public, max-age=3000')
+  res.json({
+    github_client_id: process.env.GITHUB_CLIENT_ID,
+    github_redirect_uri: process.env.GITHUB_REDIRECT_URI,
+  })
+})
+
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
 });

@@ -56,11 +56,12 @@ export const register = async (req:Request, res:Response): Promise<void> => {
     if(typeof userId != 'number') throw new Error('Unable to retrieve github data')
 
     const player = await backend.createPlayer(req.params.username, userId)
+    if(!player) throw new Error('Could not create player')
     
     res.status(200).send(`<script>
       localStorage.setItem('player_id', '${player.id}')
       localStorage.setItem('player_secret', '${player.secret}')
-      opener.loginCallback()
+      opener.loginCallback(${(player.githubID == -1) ? "'Existing account found, logging in instead'" : ''})
       self.close()
     </script>
     `)
