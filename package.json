@@ -8,7 +8,7 @@
   "scripts": {
     "test": "jest",
     "start": "node build/server.js",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon -r dotenv/config server.ts",
     "build": "mkdir -p build && cp -r public build/ && tsc --project ./"
   },
   "author": "",
