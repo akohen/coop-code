@@ -9,7 +9,7 @@ var game = {
       command = ''
     }
     return $.post('/', {cmd: command, player: game.player}).then(e => {
-      term.echo(e.data.output,{raw:true})
+      term.echo(e.data.output)
       if(e.data.errors) term.echo(`[[;red;]${e.data.errors}]`)
       if(e.data.prompt) {
         const matches = /^(.+)@(.+)>$/.exec(e.data.prompt)
