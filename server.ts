@@ -25,6 +25,15 @@ app.post('/', async (req, res) => {
   }
 });
 
+app.post('/update', async (req, res) => {
+  try {
+    const result = await game(req.body['player'], req.body['secret'], '', backend, true)
+    res.status((result.errors) ? 400 : 200).json(result)
+  } catch (error) {
+    res.status(500).json(error.message)
+  }
+});
+
 app.get('/oauth', login);
 app.get('/oauth/register/:username', register);
 

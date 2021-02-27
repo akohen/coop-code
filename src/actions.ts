@@ -32,17 +32,17 @@ function available (ctx: Context): Map<string,Command> {
   return cmds
 }
 
-async function execute(ctx: Context, cmdString: string) : Promise<appResponse> {
+async function execute(ctx: Context, cmdString: string, background = false) : Promise<appResponse> {
   let output:string | undefined, errors
   if(ctx.player.expedition.inProgress) { // command is ignored in completed expeditions
-    if (ctx.player.input != undefined) {
+    if (ctx.player.input != undefined && !background) {
       try {
         const cmd = ctx.expedition.commands.get(ctx.player.input)
         delete ctx.player.input
         output = await cmd?.run(ctx, cmdString)
       }
       catch (error) { errors = error.message }
-    } else if (cmdString !== '') {
+    } else if (cmdString !== '' && !background) {
       for(const segment of cmdString.split('|')) {
         const command = parseCommand(segment.trimLeft())
         const cmd = getAvailable(ctx, command.cmd)
