@@ -7,6 +7,7 @@ import { remindTime } from "./functions/auto_commands";
 import { alphanumChecksum, caesar, sequenceFromLast } from "./functions/ciphers";
 import { chat } from "./modules/chat";
 import { debug_mode } from "./modules/debug";
+import { autoHints } from "./modules/hint";
 import { locked } from "./nodes/locked";
 
 export const easy1 = new ExpeditionFactory({type:'easy1', players:1, difficulty:'easy', 
@@ -66,6 +67,10 @@ create:(variables) => {
       variables: new Map([['firewall','enable'], ...variables]),
   })
   exp
+    .addModule(autoHints([
+      [() => true, `Expedition-start hint`],
+      [(ctx) => ((ctx.expedition.secondsLeft??0) < 3570), `30 seconds hint`],
+    ]))
     .addModule(chat)
     .addModule(debug_mode('swordfish', {
       welcome:(ctx) => `Expedition variables and secrets:
