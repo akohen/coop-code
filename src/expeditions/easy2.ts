@@ -5,6 +5,7 @@ import { SampleData } from "./data";
 import { remindTime } from "./functions/auto_commands";
 import { chat } from "./modules/chat";
 import { debug_mode } from "./modules/debug";
+import { autoHints } from "./modules/hint";
 
 export const easy2 = new ExpeditionFactory({type:'easy2', players:1, difficulty:'easy', 
 create:(variables) => {
@@ -28,6 +29,7 @@ create:(variables) => {
       variables,
   })
   exp
+    .addModule(autoHints([]))
     .addModule(chat)
     .addModule(debug_mode('swordfish', {
       welcome:(ctx) => `Expedition variables and secrets:
