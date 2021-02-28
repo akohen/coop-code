@@ -1,14 +1,15 @@
 import { Command } from "../typings";
 import { available } from "../actions";
+import { toList } from "../utils";
 
 export const help:Command = {
   run: (ctx, args) => {
     if(args == undefined || args?.length == 0) {
-      let result = 'Available commands:';
+      const cmds = []
       for(const [cmdName, cmd] of available(ctx)) {
-        result += `\n  ${cmdName} ${cmd.help?.(false) ?? ''}`
+        cmds.push([cmdName, cmd.help?.(false)])
       }
-      return result
+      return 'Available commands:\n'+toList(cmds, {emphasize:true, pad:2})
     }
 
     const cmd = available(ctx).get(args)
@@ -17,5 +18,5 @@ export const help:Command = {
     return cmd.help(true)
     
   },
-  help: (long) => (long ? 'long':'short')
+  help: () => `Display a command's help page`
 };
