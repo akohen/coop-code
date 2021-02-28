@@ -11,8 +11,9 @@ export function toList(items: Array<Array<string|undefined>>, {pad = 0, emphasiz
 }
 
 export function em(str: string): string { return `[[;white;]${str}]`}
-
 export function hint(str: string): string { return `[[;gold;]${str}]`}
+export function red(str: string): string { return `[[;red;]${str}]`}
+export function green(str: string): string { return `[[;green;]${str}]`}
 
 export function timeFormat(duration: number): string {
   const [minutes, seconds] = [Math.floor(duration / 60), duration % 60]

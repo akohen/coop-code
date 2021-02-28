@@ -25,6 +25,7 @@ const locked = (
   nodes: [[name, {...node,
     welcome: (ctx) => {
       if(ctx.expedition.variables.get('_unlock-'+name)) return welcome
+      ctx.expedition.variables.set('_access-'+name, true)
       ctx.player.input = '_unlock-'+name
       throw new Error(locked)
     },
