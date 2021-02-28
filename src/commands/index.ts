@@ -4,6 +4,7 @@ import { echo } from "./echo";
 import { exit } from "./exit";
 import { expedition } from "./expedition";
 import { grep } from "./grep";
+import { head } from "./head";
 import { help } from "./help";
 import { ls } from "./ls";
 import { read } from "./read";
@@ -17,6 +18,7 @@ export const commands:Map<string, Command> = new Map(Object.entries({
   exit,
   expedition,
   grep,
+  head,
   help,
   ls,
   read,
