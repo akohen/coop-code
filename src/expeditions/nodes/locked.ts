@@ -1,4 +1,4 @@
-import { ExpeditionModule, Node } from "../../typings";
+import { ExpeditionModule, Node, Runnable } from "../../typings";
 
 /**
   * A node requiring a password on the first connection
@@ -13,7 +13,7 @@ import { ExpeditionModule, Node } from "../../typings";
 const locked = (
   name: string,
   { welcome, prompt, secret, locked, unlock, fail } : {
-    welcome: string,
+    welcome: string | Runnable,
     prompt: string,
     secret: string,
     locked: string,
@@ -24,7 +24,7 @@ const locked = (
 ): ExpeditionModule => ({
   nodes: [[name, {...node,
     welcome: (ctx) => {
-      if(ctx.expedition.variables.get('_unlock-'+name)) return welcome
+      if(ctx.expedition.variables.get('_unlock-'+name)) return (typeof welcome == 'string') ? welcome : welcome(ctx)
       ctx.expedition.variables.set('_access-'+name, true)
       ctx.player.input = '_unlock-'+name
       throw new Error(locked)
@@ -35,7 +35,7 @@ const locked = (
       if(args != secret) throw new Error(fail ? fail : locked)
       if(ctx.player.currentNodeName != name) ctx.player.nodes.push(name)
       ctx.expedition.variables.set('_unlock-'+name, true)
-      return unlock ? unlock : welcome
+      return unlock ? unlock : (typeof welcome == 'string') ? welcome : welcome(ctx)
     },
     help: () => (prompt),
     isAvailable: () => false
