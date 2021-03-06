@@ -21,7 +21,7 @@ export type AsyncRunnable = (ctx: Context, args?: string) => Promise<string | un
 export interface Node {
   welcome?: Runnable,
   tags?: Array<string>,
-  files?: {[name: string]: string},
+  files?: {[name: string]: string | Runnable},
   isAvailable?: (ctx:Context) => boolean,
 }
 

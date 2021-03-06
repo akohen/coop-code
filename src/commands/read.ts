@@ -4,7 +4,8 @@ export const read:Command = {
   run: (ctx: Context, args) => {
     const currentNode = ctx.player.currentNode
     if(currentNode.files != undefined && args != undefined && currentNode.files[args] != undefined) {
-      return currentNode.files[args]
+      const file = currentNode.files[args]
+      return (typeof file == 'string') ? file : file(ctx)
     }
     throw new Error(`File ${args} not found`)
   },
