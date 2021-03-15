@@ -54,6 +54,24 @@ Strings are signed using a ${em('private key')}, which is made up of 8 words of 
 
 The signature generated is always 8 characters long where the i-th character is the ${em('alphanumerical checksum')} of the i-th character of the input string and the i-th word of the key.
 If the input string is less than 8 characters, or if the string character is not an alphanumeric character, then that character is ignored`,
+
+'dss':`DSS is used to provide network storage to a system, which can be used to backup important data.
+Multiple storage pods running the DSS software together form a cluster, which can be used by the target system to store or backup data.
+
+Depending on the version installed, different capabilities are provided, such as being able to repair corrupted data.
+${em('DSS Version 1')} This version is used to distribute large dataset over 2 to 6 storage pods, and does not allow recovery of data if one pod is unavailable.
+${em('DSS Version 2')} is currently in development`,
+
+'dss_v1':`${em('DSS v1 maintenance instructions')}
+- All maintenance actions must be done using the dss binary provided
+- To access files, a minimum of ${em('3')} healthy storage pods must be connected to the cluster
+- If a pod gets disconnected from the dss cluster, it must be reconnected manually using the ${em('dss sync')} command. This command requires the correct key to be provided.
+  - Each pod has its own key
+  - Each key is an alphanumeric string of up to 8 characters eg. 'f011de79'
+  - Each key is stored locally across two chunks
+  - For the first pod of the cluster the ids of the chunks multiplied together should match the ${em('cluster id')}
+  - For the second pod of the cluster the chunks should be the first and last id of the pod
+  - For the third pod of the cluster the ids of the chunks multiplied together should match the ${em('cluster key')}`,
 }
 
 export function passwdGen(users:string[][], cipher:(str:string) => string=e=>e):string {

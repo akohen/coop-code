@@ -1,6 +1,7 @@
 import { files, passwdGen, lastLogins } from "./files"
 import { fakeWords, fakeWordsLong } from "./passwords"
 import { userNames } from "./users";
+import { adjectives, brands, nouns } from "./words";
 
 export const alphanum = '0123456789abcdefghikljmnopqrstuvwxyz'
 export const alpha = 'abcdefghijklmnopqrstuvwxyz'
@@ -31,4 +32,5 @@ export const data = {
   passwords: {fakeWords:new SampleData(...fakeWords), fakeWordsLong: new SampleData(...fakeWordsLong)},
   users: SampleData.from(userNames),
   files: {logs: SampleData.from(files.useless), passwdGen, lastLogins, documentation: files.documentation},
+  words: { nouns: SampleData.from(nouns), adjectives: SampleData.from(adjectives), brands: SampleData.from(brands) },
 }

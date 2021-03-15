@@ -25,7 +25,7 @@ const locked = (
   nodes: [[name, {...node,
     welcome: (ctx) => {
       if(ctx.expedition.variables.get('_unlock-'+name)) return (typeof welcome == 'string') ? welcome : welcome(ctx)
-      ctx.expedition.variables.set('_access-'+name, true)
+      ctx.expedition.variables.set('_access-'+name, Date.now())
       ctx.player.input = '_unlock-'+name
       throw new Error(locked)
     },
@@ -34,7 +34,7 @@ const locked = (
     run:(ctx, args) => {
       if(args != secret) throw new Error(fail ? fail : locked)
       if(ctx.player.currentNodeName != name) ctx.player.nodes.push(name)
-      ctx.expedition.variables.set('_unlock-'+name, true)
+      ctx.expedition.variables.set('_unlock-'+name, Date.now())
       return unlock ? unlock : (typeof welcome == 'string') ? welcome : welcome(ctx)
     },
     help: () => (prompt),
