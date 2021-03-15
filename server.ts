@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import game from './src/game';
 import { login, register } from './src/github';
 import { backend } from './src/backends';
@@ -7,8 +6,8 @@ import { backend } from './src/backends';
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static('public'));
 
 
