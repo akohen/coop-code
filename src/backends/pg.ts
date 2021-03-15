@@ -152,5 +152,16 @@ export const pg:Backend = {
       throw new Error('Error during state save')
     }
     return
+  },
+
+  async stats() {
+    try {
+      const query = 'SELECT (SELECT count(*)::integer FROM players) as players, (SELECT count(*)::integer FROM expeditions) as expeditions'
+      const { rows:[stats] } = await pool.query(query)
+      return stats
+    } catch (error) {
+      console.error(error.message)
+      throw new Error('Unable to get stats')
+    }
   }
 }

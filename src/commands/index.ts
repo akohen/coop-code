@@ -1,4 +1,4 @@
-import { Command } from "../typings";
+import { AsyncCommand, Command } from "../typings";
 import { connect } from "./connect";
 import { echo } from "./echo";
 import { exit } from "./exit";
@@ -13,7 +13,7 @@ import { set } from "./set";
 import { stats } from "./stats";
 import { tail } from "./tail";
 
-export const commands:Map<string, Command> = new Map(Object.entries({
+export const commands:Map<string, Command|AsyncCommand> = new Map(Object.entries({
   connect,
   echo,
   exit,

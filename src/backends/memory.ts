@@ -47,5 +47,9 @@ export const memory:Backend = {
 
   update(): Promise<void> {
     return Promise.resolve()
+  },
+
+  stats() {
+    return Promise.resolve({players:players.size, expeditions: expeditions.size})
   }
 }

@@ -44,6 +44,7 @@ export interface Backend {
   listExpeditions:  (player?: string) => Promise<Array<Expedition>>,
   createExpedition: (exp: Expedition, id?: string) => Promise<Expedition>,
   update:           (ctx: Context) => Promise<void>,
+  stats:            () => Promise<{players: number, expeditions: number}>,
 }
 
 export enum ExpeditionStatus {
