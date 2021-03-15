@@ -27,7 +27,7 @@ const cmd: AsyncCommand = {
         return ctx.player.currentNode.welcome?.(ctx)
       }
       return toTable(
-        ['type', 'difficulty', 'players'],
+        ['type', 'difficulty', 'players min'],
         Array.from(expeditionFactories.entries()).map(([t,e]) => ([t,e.difficulty, e.players?.toString()]))
       )
 
