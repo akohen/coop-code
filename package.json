@@ -10,7 +10,10 @@
     "start": "node build/server.js",
     "dev": "nodemon -r dotenv/config server.ts",
     "build": "mkdir -p build && cp -r public build/ && tsc --project ./",
-    "release:patch": "git push origin $(npm version patch)"
+    "release:patch": "git push origin $(npm version patch)",
+    "release:minor": "git push origin $(npm version minor)",
+    "release:major": "git push origin $(npm version major)",
+    "preversion": "npm test"
   },
   "author": "",
   "license": "ISC",
