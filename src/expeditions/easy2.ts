@@ -15,21 +15,19 @@ const generateKeys = () => {
   const memTmp:SampleData<number> = SampleData.from({length: memChunks*memLen-1}, (_:number, i) => (i + 1)*memSize + memStart).shuffled()
   const passwordChunk = memTmp.pop() as number - memSize
   memTmp.push(memStart, memStart+ memChunks*memLen*memSize)
-  for (let count = 0; count < 5; count++) { // Regenerate until we get a correct set of keys
-    const mem = memTmp.shuffled()
-    const memory = [
-      SampleData.from(mem.slice(0, memLen)),
-      SampleData.from(mem.slice(memLen, 2*memLen)),
-      SampleData.from(mem.slice(2*memLen, 3*memLen)),
-    ]
-    const storageKeys = [
-      memory[0].sample(2).sort(),
-      [Math.min(...memory[1]), Math.max(...memory[1])],
-      memory[2].sample(2).sort(),
-    ]
-    // The password for the navigation node should not be used to sync pods
-    if(!storageKeys.flat().includes(passwordChunk)) return {passwordChunk, memory, storageKeys}
-  }
+  const mem = memTmp.shuffled()
+  const memory = [
+    SampleData.from(mem.slice(0, memLen)),
+    SampleData.from(mem.slice(memLen, 2*memLen)),
+    SampleData.from(mem.slice(2*memLen, 3*memLen)),
+  ]
+  const storageKeys = [
+    memory[0].sample(2).sort(),
+    [Math.min(...memory[1]), Math.max(...memory[1])],
+    memory[2].sample(2).sort(),
+  ]
+  // The password for the navigation node should not be used to sync pods
+  if(!storageKeys.flat().includes(passwordChunk)) return {passwordChunk, memory, storageKeys}
   
   throw new Error(`Can't generate expedition secrets`)
 }
