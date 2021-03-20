@@ -1,5 +1,5 @@
 import { Expedition } from "./expedition"
-import { hq } from "./hq"
+import { hq } from "./expeditions/hq"
 import { ExpeditionStatus, Node } from "./typings"
 
 export class Player {
