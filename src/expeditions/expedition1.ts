@@ -1,29 +1,38 @@
 import { Expedition } from "../expedition";
+import { ExpeditionFactory } from "../expedition-factory";
 import { Node } from "../typings";
 import { remindTime } from "./functions/auto_commands";
-import { doc } from "./nodes/doc";
-import { locked } from "./nodes/locked";
+import { chat } from "./modules/chat";
+import { debug_mode } from "./modules/debug";
+import { autoHints } from "./modules/hint";
 
-const nodes: {[idx: string]: Node} = {
-  start: {
-    welcome:() => "Welcome to this real expedition.",
-    files: {foo:"bar", file2:`file2\nmulti-line content`},
-  },
-};
 
-function create(): Expedition {
+export const template = new ExpeditionFactory({type:'template', players:1, difficulty:'unknown', 
+create:(variables) => {
+  // Base nodes layout
+  const nodes: [string,Node][] = [
+    ['start', {
+      welcome:() => `Welcome to this expedition.`,
+    }],
+    ['documentation', {}],
+    ['logs', {}],
+  ];
+
   const endDate = new Date()
-  endDate.setSeconds(endDate.getSeconds() + 10)
-  const exp = new Expedition({nodes: Object.entries(nodes), endDate})
-    exp.nodes
-      .set('doc2', doc('Welcome',{'name': 'content'}))
-      .set('doc3', doc('Welcome',{'name': 'content'}))
-    exp.commands
-      .set('expedition-specific',{run:(ctx, args) => (args)})
-      .set('_auto_remind', remindTime)
-    exp
-      .addModule(locked('locked2', {welcome:'welcome', prompt:'prompt>', secret:'secret',locked:'locked'}))
+  endDate.setMinutes(endDate.getMinutes() + 60)
+  const exp = new Expedition({
+      nodes,
+      endDate,
+      variables,
+  })
+  exp
+    .addModule(autoHints([]))
+    .addModule(chat)
+    .addModule(debug_mode('swordfish', {
+      welcome:(ctx) => `Expedition variables and secrets:
+      Expedition seed: ${ctx.expedition.variables.get('_seed')}`,
+    }))
+  .commands
+    .set('_auto_remindtime', remindTime)
   return exp
-}
-
-export const exp1 = {create}
+}})

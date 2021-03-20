@@ -28,10 +28,8 @@ export class ExpeditionFactory {
     {id, players, last_updated, enddate, variables}:
     {id?:string, players?:string[], last_updated?:Date, enddate?:Date, variables?:Map<string,string|number|boolean>} = {}
   ):Expedition {
-    const varMap = (variables) ? variables : new Map([['_seed',this.type + Date.now().toString()]])
-    const seed = varMap.get('_seed')?.toString()
-    seedrandom(seed, { global: true })
-    const expedition = this._create(varMap)
+    const varMap = (variables) ? variables : new Map([['_seed', `${this.type}-${Date.now()}-0`]])
+    const expedition = this.tryCreation(varMap)
     
     // This is done here instead of inside the create function to ensure consistency
     // as this prevents having different values between creation and factory indexing
@@ -41,5 +39,23 @@ export class ExpeditionFactory {
     if(last_updated) expedition.lastUpdated = last_updated
     if(enddate) expedition.endDate = enddate
     return expedition
+  }
+
+  private tryCreation(variables:Map<string,string|number|boolean>):Expedition {
+    let seed = variables.get('_seed') as string
+    let tryCount = parseInt(seed.slice(-1))
+    while(tryCount < 5) {
+      try {
+        seedrandom(seed, { global: true })
+        return this._create(variables)
+      } catch (e) {
+        console.log('Create error on seed', seed)
+        tryCount+=1
+        seed = seed.slice(0,-1) + tryCount
+        variables.set('_seed', seed)
+      }
+    }
+    console.error('Failed to create expedition with seed', seed)
+    throw new Error('Unable to create expedition')
   }
 }
