@@ -34,6 +34,7 @@ export const pg:Backend = {
       if(!playerData) return
       const player = new Player(playerData.name)
     
+      if('tags' in playerData) player.tags = playerData.tags
       if(!playerData.type) return player
       try {
         player.expedition = restoreExpedition(playerData)

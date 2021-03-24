@@ -4,16 +4,18 @@ import { ExpeditionStatus, Node } from "./typings"
 
 export class Player {
     name: string
-    nodes!: [string]
+    nodes!: string[]
     expedition!: Expedition
     input?: string
     prevExpedition?: Expedition
     id?: string
     secret?: string
     githubID?: number
+    tags: string[]
   
     constructor(name: string) {
       this.name = name
+      this.tags = []
       this.returnToHQ()
     }
   
