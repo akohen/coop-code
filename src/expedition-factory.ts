@@ -1,11 +1,11 @@
 import seedrandom from "seedrandom";
 import { Expedition } from "./expedition";
-import { Player } from "./player";
+import { Context } from "./typings";
 
 export class ExpeditionFactory {
   type: string;
   private _create: (variables:Map<string,string|number|boolean>) => Expedition
-  isAvailable?: (player: Player) => boolean
+  isAvailable?: (context: Context) => boolean
   players?: number
   difficulty?: string
 
@@ -13,7 +13,7 @@ export class ExpeditionFactory {
     {
       type: string,
       create: (variables:Map<string,string|number|boolean>) => Expedition,
-      isAvailable?:(player: Player) => boolean,
+      isAvailable?:(context: Context) => boolean,
       players?: number,
       difficulty?: string
     }) {

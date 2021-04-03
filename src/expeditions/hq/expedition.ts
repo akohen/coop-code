@@ -14,13 +14,14 @@ const create: AsyncRunnable = async (ctx, arg) => {
   if(arg) {
     const factory = expeditionFactories.get(arg)
     if(!factory) throw new Error(`Unable to create expedition ${arg}`)
+    if(factory.isAvailable && !factory.isAvailable(ctx)) throw new Error(`Unable to create expedition ${arg}`)
     const expedition = await ctx.backend.createExpedition(factory.create())
     expedition.addPlayer(ctx.player)
     return ctx.player.currentNode.welcome?.(ctx)
   }
   return toTable(
     ['type', 'difficulty', 'players min'],
-    Array.from(expeditionFactories.entries()).map(([t,e]) => ([t,e.difficulty, e.players?.toString()]))
+    Array.from(expeditionFactories.entries()).filter(([,e]) => (!e.isAvailable||e.isAvailable(ctx))).map(([t,e]) => ([t,e.difficulty, e.players?.toString()]))
   )
 }
 
